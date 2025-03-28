@@ -1,0 +1,795 @@
+@name Ryan's Pack/Gevo/Back Panel
+@inputs WindowHeater RoadCrossingLights WaterCooler CabSignal AirDryer Radio
+@inputs DistributedPower CabFan ShortHood LongHood
+@inputs BatterySaverReset ParkingBrake AirBrake
+@inputs RunningLights FuelPump ECU LocalControl MTB Computer BCCB
+@inputs EngineControlCycle LightControlCycle EngineStart EngineStop
+@inputs CrosswalkLights ControlCompt FrontNumberLights CutIn
+@inputs Heater1 Heater2 WallHeater1 WallHeater2 AirConditioner AutoStopOverright
+@inputs RLight RDLight FLight FDLight Cover Horn 
+@inputs CommandStart CommandStop CommandIsolation
+@persist EC LC HC1 HC2
+@outputs Start Stop Isolation BrakeCutIn HornLights
+@outputs RearLight RearDitchLight FrontLight FrontDitchLight SDIS RightPTC LeftPTC
+@model models/sprops/rectangles/size_2_5/rect_18x24x3.mdl
+entity():setAlpha(0)
+
+if(first()|dupefinished()){             
+    EC=1,LC=2
+    HC1=HC2=A=0
+    setName("Ryan's Public Back Panel")
+
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(-12,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(-8.5,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(-7,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(-3.5,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(-2,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(1.5,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(6,2.0,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,1.15,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(19.5,1.25,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.3,0.5,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(24.5,3.5,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,0.875,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(200))
+    holoPos(A,entity():toWorld(vec(23.25,7.5,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoScale(A,vec(0.05,0.2,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.95,-5.65,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/ge_junk/ge_ec_switch")
+    holoScale(A,vec(0.52))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.95,-2,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/ge_junk/ge_hdlt_setup")
+    holoScale(A,vec(0.52))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.95,1.5,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/ge_stuff/ge_gevo_start_stop_buttons")
+    holoScale(A,vec(0.52))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.95,5,0.5)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/ge_stuff/ge_gevo_misc_switches")
+    holoScale(A,vec(0.52))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-12,2.0,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/lead_unit_operations")
+    holoScale(A,vec(0.06,0.96,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-7,2.0,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/lead_unit_operations")
+    holoScale(A,vec(0.06,0.96,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-2,2.0,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/locomotive_operations")
+    holoScale(A,vec(0.04,0.64,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-8.5,2-5.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/window_heater")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-8.5,2-2.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/road_crossing_lights")
+    holoScale(A,vec(0.15))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-8.5,2-1.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/water_cooler")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-8.5,2+2.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/cab_signal")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-8.5,2+4.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/air_dryer")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-8.5,2+5.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/radio")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-3.5,2-5.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/auto_stop_override")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-3.5,2-1.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/distributed_power")
+    holoScale(A,vec(0.085))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-3.5,2+2.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/cab_fan")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(-3.5,2+5.45,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/short_long_hood_headlights")
+    holoScale(A,vec(0.35))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(1.5,2-4.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/battery_saver_reset")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(1.5,2-2.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/parking_brake")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(1.5,2+5.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/air_brake")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(6,2-5.75,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/running_lights")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(6,2-3.5,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/fuel_pump_ecu")
+    holoScale(A,vec(0.095))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(6,2-0.5,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/local_control")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(6,2+3.45,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"logos/breakers/cab_display computer")
+    holoScale(A,vec(0.35))
+    A++
+    holoCreate(A)
+    holoParent(A,entity())
+    holoModel(A, "plane")
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(19.5,1.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/ge_junk/ge_sidewall_switches")  
+    holoScale(A,vec(0.7,0.6,1))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(24.5,5,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/air_conditioner")
+    holoScale(A,vec(0.14))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(24.5,2-2.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/engineers_wall_heater")
+    holoScale(A,vec(0.14))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(24.5,2+0.25,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/helpers_wall_heater")
+    holoScale(A,vec(0.14))
+    A++
+    holoCreate(A)
+    holoModel(A, "plane")
+    holoParent(A,entity())
+    holoColor(A,vec(1))
+    holoPos(A,entity():toWorld(vec(23.25,7.5,0.55)))
+    holoAng(A,entity():toWorld(ang(0,0,0)))
+    holoEntity(A):setSubMaterial(1,"cubics_pack/breakers/auto_stop_override")
+    holoScale(A,vec(0.075))
+    A++
+    holoCreate(A)
+    holoModel(A, "models/parts/gevo_speedo.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(21.45,-5.5,0)))
+    holoAng(A,entity():toWorld(ang(90,180,0)))
+    holoEntity(A):setSubMaterial(11,"models/proppertextures/bulb_green_unlit")
+    holoEntity(A):setSubMaterial(12,"models/proppertextures/bulb_green_unlit")
+    holoEntity(A):setSubMaterial(13,"models/proppertextures/bulb_green_unlit")
+    holoEntity(A):setSubMaterial(14,"models/proppertextures/bulb_green_unlit")
+    holoEntity(A):setSubMaterial(15,"models/proppertextures/bulb_green_unlit")
+    holoEntity(A):setSubMaterial(16,"models/proppertextures/bulb_green_unlit")
+    holoScale(A,vec(1.2))
+#Switches   
+
+    A=50
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/switches.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(8.525,5.85,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,90,0)))
+    holoScale(A,vec(1.75))
+    holoEntity(A):setBoneAngle(1,ang(0,-21,0))
+    A=51
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-10.25,2-5.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=52
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-10.25,2-2.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=53
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-10.25,2-1.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=54
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-10.25,2+2.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=55
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-10.25,2+4.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,2,2)
+    holoBodygroup(A,3,2)
+    A=56
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-10.25,2+5.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=57
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-5.25,2+2.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=58
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-5.25,2-1.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=59
+    holoCreate(A)
+    holoModel(A, "models/titus's_propper_model_pack_2.4/propper/circuitbreakers/breaker_single.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-5.25,2+4.5,-0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,90)))
+    A=60
+    holoCreate(A)
+    holoModel(A, "models/titus's_propper_model_pack_2.4/propper/circuitbreakers/breaker_single.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-5.25,2+6.25,-0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,90)))
+    A=61
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-0.25,2+5.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,2,2)
+    holoBodygroup(A,3,2)
+    A=62
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(-0.25,2-2.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,2,2)
+    holoBodygroup(A,3,2)
+    A=63
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2+5.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,2,2)
+    holoBodygroup(A,3,2)
+    A=64
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2+4.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,2,2)
+    holoBodygroup(A,3,2)
+    A=65
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2+2.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,2,2)
+    holoBodygroup(A,3,2)
+    A=66
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2-5.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=67
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2-4.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=68
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2-2.75,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=69
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(4.25,2-0.5,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    holoBodygroup(A,3,2)
+    A=70
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/buttons.mdl")
+    holoParent(A,entity())
+    holoBodygroup(A,0,8)
+    holoPos(A,entity():toWorld(vec(-0.25,2-4.25,0.0)))
+    holoAng(A,entity():toWorld(ang(0,0,90)))
+    holoScale(A,vec(0.5,0.5,0.5))
+    holoEntity(A):setSubMaterial(1,"models/proppertextures/rubber")
+    holoEntity(A):setSubMaterial(3,"models/proppertextures/plastic_blue")
+    A=73
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(23,2-2.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    A=74
+    holoCreate(A)
+    holoModel(A, "models/anytrains/props/bean/breaker_twopole_small.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(23,2+0.25,0.0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,0)))
+    A=75
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/buttons.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(22,7.5,0.5)))
+    holoAng(A,entity():toWorld(ang(-0,90,90)))
+    holoEntity(A):setSubMaterial(5,"models/proppertextures/acrylic2_grey_hw")
+    holoScale(A,vec(1.05))
+    holoBodygroup(A,0,4)
+    A=76
+    holoCreate(A)
+    holoModel(A, "models/titus's_propper_model_pack_2.4/propper/circuitbreakers/breaker_single.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(22,5,0)))
+    holoAng(A,entity():toWorld(ang(-0,-90,90)))
+    A=77
+    holoCreate(A)
+    holoParent(A,entity())
+    holoModel(A, "models/rlc_delta_lua/cstands/rotary_switch_1.mdl")
+    holoColor(A,vec(255))
+    holoPos(A,entity():toWorld(vec(19.5,1.25+1.75,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,90,0)))
+    holoScale(A,vec(0.5,1,1))
+    A=78
+    holoCreate(A)
+    holoParent(A,entity())
+    holoModel(A, "models/rlc_delta_lua/cstands/rotary_switch_1.mdl")
+    holoColor(A,vec(255))
+    holoPos(A,entity():toWorld(vec(19.5,1.25-1.75,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,90,0)))
+    holoScale(A,vec(0.5,1,1))
+    A=79
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/buttons.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(8.85,1.5,0.5)))
+    holoAng(A,entity():toWorld(ang(0,90,90)))
+    holoEntity(A):setSubMaterial(5,"models/proppertextures/acrylic2_grey_hw")
+    holoScale(A,vec(1.05))
+    holoBodygroup(A,0,4)
+    A=80
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/rotary_switch_1.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.45,-5.65,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,90,0)))
+    holoScale(A,vec(0.5,1,1))
+    holoBodygroup(A,0,2)
+    A=81
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/rotary_switch_1.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.45,-2,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,0,0)))
+    holoScale(A,vec(0.5,1,1))
+    holoBodygroup(A,0,2)   
+    A=82
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/switches.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(8.525,4.25,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,90,0)))
+    holoEntity(A):setBoneAngle(1,ang(0,-21,0))
+    holoScale(A,vec(1.75))
+    A=83
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/switches.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(9.925,4.25,0.5)))
+    holoAng(A,entity():toWorld(ang(-90,90,0)))
+    holoEntity(A):setBoneAngle(1,ang(0,-21,0))
+    holoScale(A,vec(1.75))
+    A=84
+    holoCreate(A)
+    holoModel(A, "models/rlc_delta_lua/cstands/buttons.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(11.22,1.5,0.5)))
+    holoAng(A,entity():toWorld(ang(-0,90,90)))
+    holoEntity(A):setSubMaterial(5,"models/proppertextures/acrylic2_red_hw")
+    holoScale(A,vec(1.05))
+    holoBodygroup(A,0,4)
+    A=85
+    holoCreate(A)
+    holoModel(A, "models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(7.25,-4.375,0.5)))
+    holoAng(A,entity():toWorld(ang(-90+0,0,90)))
+    holoScale(A,vec(0.25,0.25,0.35))
+    holoEntity(A):setSubMaterial(1,"models/proppertextures/aluminum")
+    A=86
+    holoCreate(A)
+    holoModel(A, "models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+    holoParent(A,entity())
+    holoPos(A,holoEntity(85):toWorld(vec(0,0,-8)))
+    holoAng(A,holoEntity(85):toWorld(ang(-0,0,0)))
+    holoScale(A,vec(0.25,0.25,0.35))
+    holoEntity(A):setSubMaterial(1,"models/proppertextures/aluminum")
+    A=87
+    holoCreate(A)
+    holoModel(A, "models/wam98_trainparts/miscellaneous/emd_ditchlight_pilot_mounting_bracket.mdl")
+    holoParent(A,entity())
+    holoColor(A,vec4(145,145,145,100))
+    holoPos(A,holoEntity(85):toWorld(vec(0,-2.75,-4)))
+    holoAng(A,holoEntity(85):toWorld(ang(-0,180,90)))
+    holoScale(A,vec(0.45,1.175,0.45))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+}
+
+if(~WindowHeater){holoBodygroup(51,1,WindowHeater),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~RoadCrossingLights){holoBodygroup(52,1,RoadCrossingLights),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~WaterCooler){holoBodygroup(53,1,WaterCooler),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}    
+if(~CabSignal){holoBodygroup(54,1,CabSignal),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}       
+if(~AirDryer){holoBodygroup(55,1,AirDryer),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}      
+if(~Radio){holoBodygroup(56,1,Radio),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}     
+if(~DistributedPower){holoBodygroup(58,1,DistributedPower),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~CabFan){holoBodygroup(57,1,CabFan),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}    
+if(~ShortHood){holoBodygroup(59,1,ShortHood),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}   
+if(~LongHood){holoBodygroup(60,1,LongHood),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~BatterySaverReset){holoEntity(70):setBonePos(1,vec(0,-BatterySaverReset*0.45,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~ParkingBrake){holoBodygroup(62,1,ParkingBrake),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~AirBrake){holoBodygroup(61,1,AirBrake),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}      
+if(~RunningLights){holoBodygroup(66,1,RunningLights),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~FuelPump){holoBodygroup(67,1,FuelPump),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~ECU){holoBodygroup(68,1,ECU),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~LocalControl){holoBodygroup(69,1,LocalControl),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}    
+if(~MTB){holoBodygroup(65,1,MTB),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}        
+if(~Computer){holoBodygroup(64,1,Computer),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~BCCB){holoBodygroup(63,1,BCCB),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~WallHeater1){holoBodygroup(73,1,WallHeater1),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")} 
+if(~WallHeater2){holoBodygroup(74,1,WallHeater2),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")} 
+if(~AirConditioner){holoBodygroup(76,1,AirConditioner),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}  
+if(~AutoStopOverright){holoEntity(75):setBonePos(1,vec(0,-AutoStopOverright*0.2,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~EngineStart){holoEntity(79):setBonePos(1,vec(0,-EngineStart*0.2,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~EngineStop){holoEntity(84):setBonePos(1,vec(0,-EngineStop*0.2,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~CrosswalkLights){holoEntity(82):setBoneAng(1,ang(0,(CrosswalkLights*42)-21,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~FrontNumberLights){holoEntity(83):setBoneAng(1,ang(0,(FrontNumberLights*42)-21,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~ControlCompt){holoEntity(50):setBoneAng(1,ang(0,(ControlCompt*42)-21,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~CommandStart){holoEntity(79):setBonePos(1,vec(0,-CommandStart*0.2,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~CommandStop){holoEntity(84):setBonePos(1,vec(0,-CommandStop*0.2,0)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+
+if((EngineStop|!FuelPump|!ECU)|CommandStop){Stop=1}else{Stop=0}
+if((EngineStart&EC==1&!Stop)|CommandStart){Start=1}else{Start=0}
+
+if(CutIn&AirBrake){BrakeCutIn=1}else{BrakeCutIn=0}
+
+if(Computer){SDIS=1
+    timer("Screen2",11,function(){RightPTC=1})
+    timer("Screen3",19,function(){LeftPTC=1})
+    }else{stoptimer("Screen1"),stoptimer("Screen2")
+    stoptimer("Screen3"),SDIS=0,LeftPTC=0,RightPTC=0
+}
+
+if(RoadCrossingLights){HornLights=Horn}else{HornLights=0}
+if(ShortHood&(LC==3|LC==2|LC==1)){FrontLight=FLight,FrontDitchLight=FDLight}else{FrontLight=0,FrontDitchLight=0}
+if(LongHood&(LC==4|LC==2|LC==0)){RearLight=RLight,RearDitchLight=RDLight}else{RearLight=0,RearDitchLight=0}
+
+if(!CommandIsolation & ~CommandIsolation){
+Isolation=0,EC=1,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+holoAng(80,entity():toWorld(ang(-90,(EC*-45)+135,0)))
+}elseif(CommandIsolation & ~CommandIsolation){
+Isolation=1,EC=3,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+holoAng(80,entity():toWorld(ang(-90,(EC*-45)+135,0)))
+}
+
+if(EngineControlCycle & ~EngineControlCycle){
+    EC++,if(EC == 4){EC=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    holoAng(80,entity():toWorld(ang(-90,(EC*-45)+135,0)))
+    if(EC>1){Isolation=1}else{Isolation=0}
+}    
+if(LightControlCycle & ~LightControlCycle){
+    LC++,if(LC == 5){LC=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    holoAng(81,entity():toWorld(ang(-90,(LC*-45)+90,0))) 
+}
+if(Heater1 & ~Heater1){
+    HC1++,if(HC1 == 3){HC1=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    holoAng(78,entity():toWorld(ang(-90,(HC1*-90)+90,0))) 
+}
+if(Heater2 & ~Heater2){
+    HC2++,if(HC2 == 3){HC2=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    holoAng(77,entity():toWorld(ang(-90,(HC2*-90)+90,0))) 
+}
+
+if(Cover & ~Cover | ~EngineControlCycle | ~LightControlCycle | ~EngineStop | ~EngineStart | ~CrosswalkLights | ~FrontNumberLights | ~ControlCompt){
+    if(!timerExists("CoverClose")){soundPlay(1,1,"_jazzlok/switches/throttle_lever04.wav")}
+    stoptimer("CoverClose")
+    A=85
+    holoCreate(A)
+    holoModel(A, "models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+    holoParent(A,entity())
+    holoPos(A,entity():toWorld(vec(7.25,-4.375,0.5)))
+    holoAng(A,entity():toWorld(ang(-90-100,0,90)))
+    holoScale(A,vec(0.25,0.25,0.35))
+    holoEntity(A):setSubMaterial(1,"models/proppertextures/aluminum")
+    A=86
+    holoCreate(A)
+    holoModel(A, "models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+    holoParent(A,entity())
+    holoPos(A,holoEntity(85):toWorld(vec(0,0,-8)))
+    holoAng(A,holoEntity(85):toWorld(ang(-0,0,0)))
+    holoScale(A,vec(0.25,0.25,0.35))
+    holoEntity(A):setSubMaterial(1,"models/proppertextures/aluminum")
+    A=87
+    holoCreate(A)
+    holoModel(A, "models/wam98_trainparts/miscellaneous/emd_ditchlight_pilot_mounting_bracket.mdl")
+    holoParent(A,entity())
+    holoColor(A,vec4(145,145,145,100))
+    holoPos(A,holoEntity(85):toWorld(vec(0,-2.75,-4)))
+    holoAng(A,holoEntity(85):toWorld(ang(-0,180,90)))
+    holoScale(A,vec(0.45,1.175,0.45))
+    holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+    timer("CoverClose",5,function(){
+        A=85
+        holoCreate(A)
+        holoModel(A, "models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+        holoParent(A,entity())
+        holoPos(A,entity():toWorld(vec(7.25,-4.375,0.5)))
+        holoAng(A,entity():toWorld(ang(-90+0,0,90)))
+        holoScale(A,vec(0.25,0.25,0.35))
+        holoEntity(A):setSubMaterial(1,"models/proppertextures/aluminum")
+        A=86
+        holoCreate(A)
+        holoModel(A, "models/sprops/cylinders/size_1/cylinder_1_5x6.mdl")
+        holoParent(A,entity())
+        holoPos(A,holoEntity(85):toWorld(vec(0,0,-8)))
+        holoAng(A,holoEntity(85):toWorld(ang(-0,0,0)))
+        holoScale(A,vec(0.25,0.25,0.35))
+        holoEntity(A):setSubMaterial(1,"models/proppertextures/aluminum")
+        A=87
+        holoCreate(A)
+        holoModel(A, "models/wam98_trainparts/miscellaneous/emd_ditchlight_pilot_mounting_bracket.mdl")
+        holoParent(A,entity())
+        holoColor(A,vec4(145,145,145,100))
+        holoPos(A,holoEntity(85):toWorld(vec(0,-2.75,-4)))
+        holoAng(A,holoEntity(85):toWorld(ang(-0,180,90)))
+        holoScale(A,vec(0.45,1.175,0.45))
+        holoEntity(A):setSubMaterial(1,"wtp/paint_5")
+        holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+        soundPlay(1,1,"_jazzlok/switches/throttle_lever03.wav")
+})}
