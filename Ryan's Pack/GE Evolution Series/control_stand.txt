@@ -366,7 +366,7 @@ if(first()){
     
     #Control Stand Init
     CtlTable["CTL_Version",string] = CTL_Version
-    setName("Ryan's Public GE Evolution Series Stand")
+    setName("Ryan's GE Evolution Series Stand")
     runOnChat(1)
     timer("clk",50)
 }

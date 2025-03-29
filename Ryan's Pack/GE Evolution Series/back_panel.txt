@@ -17,7 +17,7 @@ entity():setAlpha(0)
 if(first()|dupefinished()){             
     EC=1,LC=2
     HC1=HC2=A=0
-    setName("Ryan's Public GE Back Panel")
+    setName("Ryan's GE Back Panel")
 
     A++
     holoCreate(A)
