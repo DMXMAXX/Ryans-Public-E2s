@@ -86,6 +86,13 @@ if(first()){
     
     CS = ControlStand:entity()
     
+    CS:setBodygroup(1,4)
+    CS:setBodygroup(2,10)
+    CS:setBodygroup(3,10)
+    CS:setBodygroup(4,12)
+    CS:setBodygroup(5,8)
+    CS:setBodygroup(6,0)
+
     CS:setSubMaterial(4,"models/proppertextures/abs_plastic_black")
     CS:setSubMaterial(5,"models/proppertextures/invisible")
     CS:setSubMaterial(6,"models/proppertextures/invisible")
@@ -94,9 +101,7 @@ if(first()){
     CS:setSubMaterial(9,"models/proppertextures/invisible")
     CS:setSubMaterial(10,"models/proppertextures/invisible")
     CS:setSubMaterial(11,"models/proppertextures/invisible")
-    CS:setSubMaterial(12,"models/proppertextures/invisible")
     CS:setSubMaterial(13,"models/proppertextures/invisible")
-    CS:setSubMaterial(14,"models/proppertextures/invisible")
     CS:setSubMaterial(15,"models/proppertextures/invisible")
     CS:setSubMaterial(16,"models/proppertextures/invisible")
     CS:setSubMaterial(17,"models/proppertextures/invisible")
@@ -116,7 +121,7 @@ if(first()){
     holoParent(A,CS)
 
     A=3
-    holoCreate(A,CS:toWorld(vec(-14,-13.5,22.5)),vec(1),CS:toWorld(ang(0,-90,-45)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
+    holoCreate(A,CS:toWorld(vec(-14.25,-13.5,22.75)),vec(1),CS:toWorld(ang(0,-90,-45)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
     holoParent(A,CS)
 
     A=4
@@ -140,7 +145,7 @@ if(first()){
     A=7
     holoCreate(A,CS:toWorld(vec(-14.793,-13.5,19-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/800t style buttons.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,0)
+    holoBodygroup(A,1,1)
     holoColor(A,vec(50,150,50))
     holoEntity(A):setSubMaterial(2,"models/proppertextures/acrylic")    
     holoEntity(A):setSubMaterial(3,"models/proppertextures/acrylic")
@@ -148,7 +153,7 @@ if(first()){
     A=8
     holoCreate(A,CS:toWorld(vec(-14.78,-13.5,19-3-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,2,1)
+    holoBodygroup(A,2,5)
 
     A=9
     holoCreate(A,CS:toWorld(vec(-15,-13.5,19-6-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
@@ -183,23 +188,20 @@ if(first()){
     A=14
     holoCreate(A,CS:toWorld(vec(-11.6-0.25, 6.6-1, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,0,0)
-    holoEntity(A):setSubMaterial(1,"models/proppertextures/invisible")
-    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")    
+    holoBodygroup(A,2,5)  
+    holoBodygroup(A,3,1) 
 
     A=15
     holoCreate(A,CS:toWorld(vec(-11.4-0.25, 7.7-1, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,0,0)
-    holoEntity(A):setSubMaterial(1,"models/proppertextures/invisible")
-    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")    
+    holoBodygroup(A,2,5)  
+    holoBodygroup(A,3,1) 
 
     A=16
     holoCreate(A,CS:toWorld(vec(-11.2-0.25, 8.7-1, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,0,0)
-    holoEntity(A):setSubMaterial(1,"models/proppertextures/invisible")
-    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")    
+    holoBodygroup(A,2,5) 
+    holoBodygroup(A,3,1) 
 
     A=17
     holoCreate(A,CS:toWorld(vec(-11.1+0.7, 7.597+4, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel.mdl")
@@ -212,8 +214,8 @@ if(first()){
     A=18
     holoCreate(A,CS:toWorld(vec(-11.6+0.7, 6.57+4, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
-    holoEntity(A):setSubMaterial(1,"models/proppertextures/invisible")
-    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")    
+    holoBodygroup(A,2,5) 
+    holoBodygroup(A,3,1) 
 
     A=19
     holoCreate(A,CS:toWorld(vec(-10.8+0.7, 7.55+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
@@ -224,47 +226,57 @@ if(first()){
     holoParent(A,CS)
 
     A=21
-    holoCreate(A,CS:toWorld(vec(-14.7,-13.5,19-0+1.15)),vec(0.05,0.075,1),CS:toWorld(ang(90,0,0)),vec(255),"plane")
+    holoCreate(A,CS:toWorld(vec(-13.4,-13.5,22.1)),vec(0.8),CS:toWorld(ang(0,90,45)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoMaterial(A,"foxes_pack/materials/horn")
+    holoBodygroup(A,1,3)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/horn")
 
     A=22
-    holoCreate(A,CS:toWorld(vec(-14.7,-13.5,19-6+1.15)),vec(0.05,0.075,1),CS:toWorld(ang(90,0,0)),vec(255),"plane")
+    holoCreate(A,CS:toWorld(vec(-14.8,-13.5,19.8-(1)+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoMaterial(A,"foxes_pack/materials/bell")
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/horn_sequencer")
 
     A=23
-    holoCreate(A,CS:toWorld(vec(-14.7,-13.5,19-9+1.15)),vec(0.05,0.075,1),CS:toWorld(ang(90,0,0)),vec(255),"plane")
+    holoCreate(A,CS:toWorld(vec(-14.8,-13.5,19.8-4+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoMaterial(A,"foxes_pack/materials/alerter_reset")
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/eot_rear_emergency_brake")
 
     A=24
-    holoCreate(A,CS:toWorld(vec(-14.7,-13.5,19-12+1.15)),vec(0.05,0.075,1),CS:toWorld(ang(90,0,0)),vec(255),"plane")
+    holoCreate(A,CS:toWorld(vec(-14.8,-13.5,19.8-7+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoMaterial(A,"foxes_pack/materials/sand")
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/bell")
 
     A=25
-    holoCreate(A,CS:toWorld(vec(-14.7,-13.5,19-15+1.15)),vec(0.05,0.085,1),CS:toWorld(ang(90,0,0)),vec(255),"plane")
+    holoCreate(A,CS:toWorld(vec(-14.8,-13.5,19.8-10+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoMaterial(A,"foxes_pack/materials/lead_axle_sand")
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/alerter_reset")
 
-    P1 = p2mCreate(1,CS:pos(),CS:angles())
-    P1 = p2mCreate(2,CS:pos(),CS:angles())
-    P1 = p2mCreate(3,CS:pos(),CS:angles())
-  
-    for(I=0,15,3){
-        P1:p2mPushModel(1,"models/sprops/rectangles_thin/size_1/rect_3x3x1_5.mdl",array(),vec(-15.75,-13.5,19-I+1.15),ang(0,0,0),vec(0.70,0.65,0.5),0,0,0)
-    }    
+    A=26
+    holoCreate(A,CS:toWorld(vec(-14.8,-13.5,19.8-13+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/force_sand") 
 
-    P1:p2mPushModel(1,"models/floofy/trainparts/cab_parts/ge/cab_control_stands/ge_kc108/type1/type1_knorr.mdl",array(1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17),vec(0),ang(0,0,0),vec(1),0,0,70784)
-    P1:p2mPushModel(2,"models/floofy/trainparts/cab_parts/ge/cab_control_stands/ge_kc108/type1/type1_knorr.mdl",array(1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17),vec(0),ang(0,0,0),vec(1),0,0,70784,array(
-    vec(0, 0, 5),vec(0, 0, -1)))
+    A=27
+    holoCreate(A,CS:toWorld(vec(-14.8,-13.5,19.8-16+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/plate labels/lead_sand")    
 
-    P1:p2mSetMaterial(1,"models/proppertextures/enamel_black") 
-    P1:p2mSetMaterial(2,"models/proppertextures/aluminum")
-    P1:p2mSetParent(CS)
-    P1:p2mBuild()
-    
+    A=28
+    holoCreate(A,CS:toWorld(vec(0)),vec(1),CS:toWorld(ang(0,0,0)),vec(255),"models/floofy/trainparts/cab_parts/ge/cab_control_stands/ge_kc108/type1/type1_knorr.mdl")
+    holoParent(A,CS)
+    for(I=1,18,1){
+        holoEntity(A):setSubMaterial(I,"models/proppertextures/invisible")
+    }
+    holoEntity(A):setSubMaterial(8,"models/proppertextures/aluminum")
+    holoClip(A,1,vec(0, 0, 5),vec(0, 0, -1),0)
+    holoClipEnabled(A,1,1)
+
     RevBone = holoEntity(2):boneIndex("reverser")
     ThrBone = holoEntity(2):boneIndex("throttle")
     DynBone = holoEntity(2):boneIndex("dynamic")
@@ -1246,15 +1258,15 @@ if(chatClk(owner())|chatClk(Pod:driver())){
 if(Horn & ~Horn){holoEntity(3):animate(1,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")}elseif(!Horn & ~Horn){holoEntity(3):animate(0,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")}
 
 if(BellToggle & ~BellToggle & Bell==0){
-    Bell=1,holoEntity(9):animate(1,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")
+    Bell=1,holoEntity(9):animate(1,1),holoEntity(9):soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")
 }elseif(BellToggle & ~BellToggle & Bell==1){
-    Bell=0,holoEntity(9):animate(2,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_off.wav")
+    Bell=0,holoEntity(9):animate(2,1),holoEntity(9):soundPlay(0,1,"rlc_delta/cstands/bell_off.wav")
 }elseif(!BellToggle & ~BellToggle){holoEntity(9):animate(0,1)}
 
-if(AlertorReset & ~AlertorReset){holoEntity(10):animate(1,1),CS:soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav"),timer(0.25,function(){holoEntity(10):animate(0,1)})}
+if(AlertorReset & ~AlertorReset){holoEntity(10):animate(1,1),holoEntity(10):soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav"),timer(0.25,function(){holoEntity(10):animate(0,1)})}
 
 if(GaugeLight & ~GaugeLight){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(19):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
     holoEntity(19):animate(1,1)
     holoEntity(13):setSubMaterial(5,"models/indicators/ind_enginerun_lit")
     holoEntity(13):setSubMaterial(4,"models/indicators/ind_gen_lit")
@@ -1263,7 +1275,7 @@ if(GaugeLight & ~GaugeLight){
     holoEntity(17):setSubMaterial(4,"models/indicators/ind_gauge_lit")
     holoEntity(17):setSubMaterial(3,"models/indicators/ind_step_lit")
 }elseif(!GaugeLight & ~GaugeLight){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(19):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
     holoEntity(19):animate(0,1)
     holoEntity(13):setSubMaterial(5,"models/indicators/ind_enginerun_unlit")
     holoEntity(13):setSubMaterial(4,"models/indicators/ind_gen_unlit")
@@ -1274,23 +1286,23 @@ if(GaugeLight & ~GaugeLight){
 }
 
 if(StepLight & ~StepLight){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(20):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
     holoEntity(20):animate(1,1)
 }elseif(!StepLight & ~StepLight){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(20):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
     holoEntity(20):animate(0,1)
 }
 
 if(Sander & ~Sander){
-    CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")
+    holoEntity(11):soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")
     holoEntity(11):animate(1,1)
 }elseif(!Sander & ~Sander){
-    CS:soundPlay(0,1,"rlc_delta/cstands/bell_off.wav")
+    holoEntity(11):soundPlay(0,1,"rlc_delta/cstands/bell_off.wav")
     holoEntity(11):animate(0,1)
 }
 
 if(FrontLightCycle & ~FrontLightCycle){
-    CS:soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
+    holoEntity(6):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
     FLC++,if(FLC == 5){FLC=0}
     holoEntity(6):setBoneAngRelative(1,ang(-(44.9*FLC),0,0))
     if(FLC==0){FrontLight=0,FrontDitchLight=0}
@@ -1301,7 +1313,7 @@ if(FrontLightCycle & ~FrontLightCycle){
 }
 
 if(RearLightCycle & ~RearLightCycle){
-    CS:soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
+    holoEntity(5):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
     RLC++,if(RLC == 5){RLC=0}
     holoEntity(5):setBoneAngRelative(1,ang(-(44.9*RLC),0,0))
     if(RLC==0){RearLight=0,RearDitchLight=0}
@@ -1312,42 +1324,42 @@ if(RearLightCycle & ~RearLightCycle){
 }
 
 if(ReverserInsert & ~ReverserInsert){
-    CS:soundPlay(0,1,"_jazzlok/switches/barrel_reverser01.wav")
+    holoEntity(2):soundPlay(0,1,"_jazzlok/switches/barrel_reverser01.wav")
     holoBodygroup(2,1,1)
 }elseif(!ReverserInsert & ~ReverserInsert){
-    CS:soundPlay(0,1,"_jazzlok/switches/barrel_reverser02.wav")
+    holoEntity(2):soundPlay(0,1,"_jazzlok/switches/barrel_reverser02.wav")
     holoBodygroup(2,1,0)
 }
 
 if(DynamicBrake & ~DynamicBrake){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(18):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(18):animate(1,1)
 }elseif(!DynamicBrake & ~DynamicBrake){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(18):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(18):animate(0,1)
 }
 
 if(EngineRun & ~EngineRun){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(14):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(14):animate(1,1)
 }elseif(!EngineRun & ~EngineRun){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(14):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(14):animate(0,1)
 }
 
 if(GenField & ~GenField){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(15):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(15):animate(1,1)
 }elseif(!GenField & ~GenField){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(15):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(15):animate(0,1)
 }
 
 if(Control & ~Control){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(16):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(16):animate(1,1)
 }elseif(!Control & ~Control){
-    CS:soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(16):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(16):animate(0,1)
 }
 
