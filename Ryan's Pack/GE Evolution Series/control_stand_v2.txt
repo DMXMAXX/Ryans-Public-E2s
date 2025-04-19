@@ -1,7 +1,7 @@
 @name Ryan's Pack/GE Evolution Series/Control Stand V2
 @inputs MU_Master Pod:entity ControlStand:wirelink Number:string EmBrake HEP_Notch Active RemoteControl UsingRearSeat HumpMultiplier FeedPressure CommandThrottle CommandDynamic CommandAutobrake CommandIndependentbrake
 @inputs  BellToggle Horn AlertorReset Sander EngineRun GenField Control DynamicBrake GaugeLight StepLight FrontLightCycle RearLightCycle ReverserInsert
-@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight
+@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight HandBrake
 @persist NotchedThrottle NumThrottleNotches HasDynamics NotchedDynamics TransitionMode TransitionControlType AirBrakeMode LocoBrakeMode InitialReduction Lock_26L Bleeding CTL_Version:string
 @persist [Lever_Throttle Lever_ReverserF Lever_ReverserN Lever_ReverserB Lever_24RL Lever_26L AirBrakeApply AirBrakeRelease AirBrakeDump LocoBrakeFull LocoBrakeReleaseHard LocoBrakeReleaseSoft WarningHiss]:string
 @persist NQ Notch DNQ DynaNotch Dynamics TransitionQ RevQ ABQ HissQ LBQ LHissQ
