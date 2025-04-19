@@ -130,22 +130,15 @@ if(first()){
     holoParent(A,CS)
 
     A=4
-    holoCreate(A,CS:toWorld(vec(-15.2, -22.985, 4)),vec(0.9),CS:toWorld(ang(76,0,0)),vec(255),"models/rlc_delta_lua/accessories/ge_hdlt.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.4, -22.985, 4.3)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
     holoParent(A,CS)
-    holoEntity(A):setSubMaterial(1,"models/rlc_delta_lua/accessories/ge_hdlt_r")
-    holoClip(A,1,vec(1.7, 0, 0),vec(1, 0, 0),0)
-    holoClipEnabled(A,1,1)
- 
-    A=5
-    holoCreate(A,CS:toWorld(vec(-15.2, -22.985, 4)),vec(0.9),CS:toWorld(ang(76,0,0)),vec(255),"models/rlc_delta_lua/accessories/ge_hdlt.mdl")
-    holoParent(A,CS)
-    holoEntity(A):setSubMaterial(1,"models/rlc_delta_lua/accessories/ge_hdlt_f")
-    holoClip(A,1,vec(1.7, 0, 0),vec(-1, 0, 0),0)
-    holoClipEnabled(A,1,1)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/rotary switch labels/back_light_ditch")
+    holoBodygroup(A,1,4)
 
     A=6
-    holoCreate(A,CS:toWorld(vec(-15.2, -17.5, 4)),vec(0.9),CS:toWorld(ang(76,0,0)),vec(255),"models/rlc_delta_lua/accessories/ge_hdlt.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.4, -17.5, 4.3)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
     holoParent(A,CS)
+    holoBodygroup(A,1,4)
 
     A=7
     holoCreate(A,CS:toWorld(vec(-14.793,-13.5,19-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/800t style buttons.mdl")
@@ -281,6 +274,16 @@ if(first()){
     holoEntity(A):setSubMaterial(8,"models/proppertextures/aluminum")
     holoClip(A,1,vec(0, 0, 5),vec(0, 0, -1),0)
     holoClipEnabled(A,1,1)
+
+    A=29
+    holoCreate(A,CS:toWorld(vec(-15.4, -22.985, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+
+    A=30
+    holoCreate(A,CS:toWorld(vec(-15.4, -17.5, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
 
     RevBone = holoEntity(2):boneIndex("reverser")
     ThrBone = holoEntity(2):boneIndex("throttle")
@@ -1307,24 +1310,22 @@ if(Sander & ~Sander){
 
 if(FrontLightCycle & ~FrontLightCycle){
     holoEntity(6):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
-    FLC++,if(FLC == 5){FLC=0}
-    holoEntity(6):setBoneAngRelative(1,ang(-(44.9*FLC),0,0))
+    FLC++,if(FLC == 4){FLC=0}
+    holoEntity(6):setBoneAngRelative(0,ang(-(44.9*FLC),0,0))
     if(FLC==0){FrontLight=0,FrontDitchLight=0}
-    if(FLC==1){FrontLight=0.5,FrontDitchLight=0}
-    if(FLC==2){FrontLight=1,FrontDitchLight=0}
-    if(FLC==3){FrontLight=0.5,FrontDitchLight=1}
-    if(FLC==4){FrontLight=1,FrontDitchLight=1}
+    if(FLC==1){FrontLight=0.25,FrontDitchLight=0}
+    if(FLC==2){FrontLight=0.5,FrontDitchLight=0}
+    if(FLC==3){FrontLight=1,FrontDitchLight=1}
 }
 
 if(RearLightCycle & ~RearLightCycle){
-    holoEntity(5):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
-    RLC++,if(RLC == 5){RLC=0}
-    holoEntity(5):setBoneAngRelative(1,ang(-(44.9*RLC),0,0))
+    holoEntity(4):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
+    RLC++,if(RLC == 4){RLC=0}
+    holoEntity(4):setBoneAngRelative(0,ang(-(44.9*RLC),0,0))
     if(RLC==0){RearLight=0,RearDitchLight=0}
-    if(RLC==1){RearLight=0.5,RearDitchLight=0}
-    if(RLC==2){RearLight=1,RearDitchLight=0}
-    if(RLC==3){RearLight=0.5,RearDitchLight=1}
-    if(RLC==4){RearLight=1,RearDitchLight=1}    
+    if(RLC==1){RearLight=0.25,RearDitchLight=0}
+    if(RLC==2){RearLight=0.5,RearDitchLight=0}
+    if(RLC==3){RearLight=1,RearDitchLight=1}  
 }
 
 if(ReverserInsert & ~ReverserInsert){

@@ -109,10 +109,10 @@ if(LongHood&(LC==4|LC==2|LC==0)){RearLight=RLight,RearDitchLight=RDLight}else{Re
 
 if(!CommandIsolation & ~CommandIsolation){
 Isolation=0,EC=1,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
-holoAng(80,entity():toWorld(ang(-90,(EC*-45)+135,0)))
+entity():setBoneAngRelative(29,ang((EC*-44.9)+45,0,0))
 }elseif(CommandIsolation & ~CommandIsolation){
 Isolation=1,EC=3,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
-holoAng(80,entity():toWorld(ang(-90,(EC*-45)+135,0)))
+entity():setBoneAngRelative(29,ang((EC*-44.9)+45,0,0))
 }
 
 if(HandBrake){entity():setSubMaterial(14,"models/proppertextures/bulb_red_lit")}
