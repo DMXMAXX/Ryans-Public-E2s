@@ -1,5 +1,5 @@
 @name Ryan's Pack/GE Evolution Series/Control Stand V2
-@inputs MU_Master Pod:entity ControlStand:wirelink Number:string EmBrake HEP_Notch Active RemoteControl UsingRearSeat HumpMultiplier FeedPressure CommandThrottle CommandDynamic CommandAutobrake CommandIndependentbrake
+@inputs MU_Master Pod:entity ControlStand:wirelink Number:string EmBrake HEP_Notch Active RemoteControl UsingRearSeat HumpMultiplier SetFeedPressure CommandThrottle CommandDynamic CommandAutobrake CommandIndependentbrake
 @inputs  BellToggle Horn AlertorReset Sander EngineRun GenField Control DynamicBrake GaugeLight StepLight FrontLightCycle RearLightCycle ReverserInsert
 @outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight HandBrake
 @persist NotchedThrottle NumThrottleNotches HasDynamics NotchedDynamics TransitionMode TransitionControlType AirBrakeMode LocoBrakeMode InitialReduction Lock_26L Bleeding CTL_Version:string
@@ -24,6 +24,7 @@ if(first()){
     
     #Use models/floofy/trainparts/cab_parts/ge/cab_control_stands/ge_kc108/type1/type1_knorr.mdl
     #This version uses Ryan's Detail Pack -> https://steamcommunity.com/sharedfiles/filedetails/?id=3451666898
+    #Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/Ryan's%20Pack/GE%20Evolution%20Series/control_stand_v2.txt
     
     #General Setup Instructions:
     #You will need one of these with RLC PT2. Spawn it somewhere and get wiring! See the RLC PT2 Operator's Manual for more instructions.
@@ -1260,7 +1261,7 @@ if(chatClk(owner())|chatClk(Pod:driver())){
     
 }
 
-#BellToggle Horn AlertorReset Sander EngineRun GenField Control DynamicBrake GaugeLight
+if(SetFeedPressure > 0){FeedPressure=SetFeedPressure}
 
 if(Horn & ~Horn){holoEntity(3):animate(1,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")}elseif(!Horn & ~Horn){holoEntity(3):animate(0,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")}
 
@@ -1367,6 +1368,3 @@ if(Control & ~Control){
     holoEntity(16):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
     holoEntity(16):animate(0,1)
 }
-
-#jazzlok_sounds/switches/switch01.wav
-#buttons/lightswitch2.wav
