@@ -118,6 +118,9 @@ entity():setBoneAngRelative(29,ang((EC*-44.9)+45,0,0))
 if(HandBrake){entity():setSubMaterial(14,"models/proppertextures/bulb_red_lit")}
 else{entity():setSubMaterial(14,"models/proppertextures/bulb_red_unlit")}
 
+if(BatterySaverReset){entity():setSubMaterial(5,"models/proppertextures/bulb_blue_lit")}
+else{entity():setSubMaterial(5,"models/proppertextures/bulb_blue_unlit")}
+
 if(EngineControlCycle & ~EngineControlCycle){
     EC++,if(EC == 4){EC=0}
     soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
