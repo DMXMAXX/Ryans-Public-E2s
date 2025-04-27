@@ -14,6 +14,7 @@
 @model models/ryan's detail pack/ge evolution series backpanel.mdl
 
 #This version uses Ryan's Detail Pack -> https://steamcommunity.com/sharedfiles/filedetails/?id=3451666898
+#Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/Ryan's%20Pack/GE%20Evolution%20Series/back_panel_v2.txt
 
 if(first()|dupefinished()){             
     EC=1,LC=2
