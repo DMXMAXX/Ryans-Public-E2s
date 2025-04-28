@@ -131,13 +131,13 @@ if(first()){
     holoParent(A,CS)
 
     A=4
-    holoCreate(A,CS:toWorld(vec(-15.4, -22.985, 4.3)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.4, -22.985, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
     holoParent(A,CS)
     holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/rotary switch labels/back_light_ditch")
     holoBodygroup(A,1,4)
 
     A=6
-    holoCreate(A,CS:toWorld(vec(-15.4, -17.5, 4.3)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.4, -17.5, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
     holoParent(A,CS)
     holoBodygroup(A,1,4)
 
