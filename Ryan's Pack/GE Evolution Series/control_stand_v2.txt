@@ -1,13 +1,13 @@
 @name Ryan's Pack/GE Evolution Series/Control Stand V2
 @inputs MU_Master Pod:entity ControlStand:wirelink Number:string EmBrake HEP_Notch Active RemoteControl UsingRearSeat HumpMultiplier SetFeedPressure CommandThrottle CommandDynamic CommandAutobrake CommandIndependentbrake
 @inputs  BellToggle Horn AlertorReset Sander EngineRun GenField Control DynamicBrake GaugeLight StepLight FrontLightCycle RearLightCycle ReverserInsert
-@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight HandBrake
+@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight HandBrake Autostart
 @persist NotchedThrottle NumThrottleNotches HasDynamics NotchedDynamics TransitionMode TransitionControlType AirBrakeMode LocoBrakeMode InitialReduction Lock_26L Bleeding CTL_Version:string
 @persist [Lever_Throttle Lever_ReverserF Lever_ReverserN Lever_ReverserB Lever_24RL Lever_26L AirBrakeApply AirBrakeRelease AirBrakeDump LocoBrakeFull LocoBrakeReleaseHard LocoBrakeReleaseSoft WarningHiss]:string
 @persist NQ Notch DNQ DynaNotch Dynamics TransitionQ RevQ ABQ HissQ LBQ LHissQ
 @persist ControlPrintOrder:array DriverQ Routing:table DriverOld:entity Controls:table Shift:string
 @persist ReverserF ReverserB IncreaseThrottle DecreaseThrottle IncreaseDynamics DecreaseDynamics IncreaseTrainBrake DecreaseTrainBrake IncreaseLocoBrake DecreaseLocoBrake SelectorUp SelectorDown
-@persist HandBrake EmergencyBrake Sander Sand HF HR Bell
+@persist HandBrake EmergencyBrake Sander Sand HF HR Bell Autostart
 @persist SetReverser SetThrottle SetDynamics SetSelector SetBrakeNotch SetEqualRes SetLocoBrakeNotch SetLocoBrakePressure SetBleeding FeedPressure FullReleaseCock WarningHissQ
 @persist HornType C1P:vector C1A:angle CordAnchor1:vector CordAnchor2:vector CordExtendLength DongleHeight PullLength DownRatio
 @persist CS:entity FLC RLC
@@ -131,13 +131,13 @@ if(first()){
     holoParent(A,CS)
 
     A=4
-    holoCreate(A,CS:toWorld(vec(-15.4, -22.985, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.35, -22.985, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
     holoParent(A,CS)
     holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/rotary switch labels/back_light_ditch")
     holoBodygroup(A,1,4)
 
     A=6
-    holoCreate(A,CS:toWorld(vec(-15.4, -17.5, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.35, -17.5, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
     holoParent(A,CS)
     holoBodygroup(A,1,4)
 
@@ -277,12 +277,12 @@ if(first()){
     holoClipEnabled(A,1,1)
 
     A=29
-    holoCreate(A,CS:toWorld(vec(-15.4, -22.985, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.35, -22.985, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
     holoParent(A,CS)
     holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
 
     A=30
-    holoCreate(A,CS:toWorld(vec(-15.4, -17.5, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.35, -17.5, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
     holoParent(A,CS)
     holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
 
@@ -972,6 +972,8 @@ if(clk("clk")){
     holoEntity(2):setBoneAngRelative(DynBone,ang(Dynamics ? -93*(-SetDynamics/100) : 0,0,0))
     #Train Brake
     local TBB = 0
+
+    Autostart = SetReverser
 
     TBB = select(SetBrakeNotch+1,0,adc(0,FeedPressure-InitialReduction - FeedPressure*64/FeedPressure,50,FeedPressure-InitialReduction-SetEqualRes)+30,110,0,0,0,125)
     holoEntity(1):setBoneAngRelative(TBBone,ang(0,-TBB/1.5,0))

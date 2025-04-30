@@ -8,7 +8,7 @@
 @inputs Heater1Cycle Heater2Cycle WallHeater1 WallHeater2 HeaterAirConditioner AutoStopOverright
 @inputs RLight RDLight FLight FDLight Cover Horn HandBrake
 @inputs CommandStart CommandStop CommandIsolation
-@persist EC LC HC1 HC2
+@persist EC LC HC1 HC2 Start Stop Isolation
 @outputs Start Stop Isolation BrakeCutIn HornLights
 @outputs RearLight RearDitchLight FrontLight FrontDitchLight SDIS RightPTC LeftPTC
 @model models/ryan's detail pack/ge evolution series backpanel.mdl
@@ -89,19 +89,30 @@ if(~FrontNumberLights){entity():setBoneAngRelative(33,ang(0,0,20-FrontNumberLigh
 if(~ControlCompt){entity():setBoneAngRelative(32,ang(0,0,20-ControlCompt*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
 if(~BarringOverTool){entity():setBoneAngRelative(34,ang(0,0,20-BarringOverTool*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
 if(~EmergencyLighting){entity():setBoneAngRelative(35,ang(0,0,20-EmergencyLighting*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
-if(~CommandStart){entity():setBonePosRelative(27,vec(0,0,CommandStart*-0.2)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
-if(~CommandStop){entity():setBonePosRelative(26,vec(0,0,CommandStop*-0.2)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
 
-if((EngineStop|!FuelPumpECU)|CommandStop){Stop=1}else{Stop=0}
-if((EngineStart&EC==1&!Stop)|CommandStart){Start=1}else{Start=0}
+if(EngineStop|!FuelPumpECU){Stop=1}else{Stop=0}
+if(EngineStart&EC==1&!Stop){Start=1}else{Start=0}
 
 if(CutIn&AirBrake){BrakeCutIn=1}else{BrakeCutIn=0}
 
-if(MTB&Computer&BCCB){timer("Screen1",1,function(){SDIS=1})
+if(Computer){timer("Screen1",1,function(){SDIS=1})
     timer("Screen2",12,function(){RightPTC=1})
     timer("Screen3",20,function(){LeftPTC=1})
     }else{stoptimer("Screen1"),stoptimer("Screen2")
     stoptimer("Screen3"),SDIS=0,LeftPTC=0,RightPTC=0
+}
+
+if(CommandStart & ~CommandStart){
+    stoptimer("AutoStop1"),stoptimer("AutoStart1"),stoptimer("AutoStart2")
+    Isolation=Stop=0,EC=Start=1
+    timer("AutoStart1",1,function(){Start=0})  
+    timer("AutoStart2",35,function(){Isolation=1,EC=3})    
+}
+
+if(CommandStop & ~CommandStop){
+    stoptimer("AutoStop1"),stoptimer("AutoStart1"),stoptimer("AutoStart2")
+    Isolation=Start=0,EC=Stop=1
+    timer("AutoStop",1,function(){Stop=0})
 }
 
 if(RoadCrossingLights){HornLights=Horn}else{HornLights=0}
