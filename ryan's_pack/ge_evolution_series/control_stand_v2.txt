@@ -1,0 +1,1433 @@
+@name Ryan's Pack/GE Evolution Series/Control Stand V2
+@inputs MU_Master Pod:entity ControlStand:wirelink Number:string EmBrake HEP_Notch Active RemoteControl UsingRearSeat HumpMultiplier SetFeedPressure CommandThrottle CommandDynamic CommandAutobrake CommandIndependentbrake
+@inputs  BellToggle Horn AlertorReset Sander EngineRun GenField Control DynamicBrake GaugeLight StepLight FrontLightCycle RearLightCycle ReverserInsert
+@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight Autostart
+@persist NotchedThrottle NumThrottleNotches HasDynamics NotchedDynamics TransitionMode TransitionControlType AirBrakeMode LocoBrakeMode InitialReduction Lock_26L Bleeding CTL_Version:string
+@persist [Lever_Throttle Lever_ReverserF Lever_ReverserN Lever_ReverserB Lever_24RL Lever_26L AirBrakeApply AirBrakeRelease AirBrakeDump LocoBrakeFull LocoBrakeReleaseHard LocoBrakeReleaseSoft WarningHiss]:string
+@persist NQ Notch DNQ DynaNotch Dynamics TransitionQ RevQ ABQ HissQ LBQ LHissQ
+@persist ControlPrintOrder:array DriverQ Routing:table DriverOld:entity Controls:table Shift:string
+@persist ReverserF ReverserB IncreaseThrottle DecreaseThrottle IncreaseDynamics DecreaseDynamics IncreaseTrainBrake DecreaseTrainBrake IncreaseLocoBrake DecreaseLocoBrake SelectorUp SelectorDown
+@persist HandBrake EmergencyBrake Sander Sand HF HR Bell Autostart
+@persist SetReverser SetThrottle SetDynamics SetSelector SetBrakeNotch SetEqualRes SetLocoBrakeNotch SetLocoBrakePressure SetBleeding FeedPressure FullReleaseCock WarningHissQ
+@persist HornType C1P:vector C1A:angle CordAnchor1:vector CordAnchor2:vector CordExtendLength DongleHeight PullLength DownRatio
+@persist CS:entity FLC RLC
+@persist AutoB:entity IndB:entity
+@persist RevBone ThrBone DynBone TBBone LBBone LBHBone
+@trigger
+
+if(duped()){
+    reset()
+}
+if(first()){
+    #FOR USE WITH RLC PT 2.0.66 OR OTHER COMPATIBLE VERSIONS
+    CtlTable["CS_Version",string] = "2.0.66"
+    
+    #Use models/floofy/trainparts/cab_parts/ge/cab_control_stands/ge_kc108/type1/type1_knorr.mdl
+    #This version uses Ryan's Detail Pack -> https://steamcommunity.com/sharedfiles/filedetails/?id=3451666898
+    #Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/Ryan's%20Pack/GE%20Evolution%20Series/control_stand_v2.txt
+    
+    #General Setup Instructions:
+    #You will need one of these with RLC PT2. Spawn it somewhere and get wiring! See the RLC PT2 Operator's Manual for more instructions.
+    #Don't neglect to check the config!
+    #The "HEP_Notch" input is only necessary if the locomotive has HEP.
+    #The "Active" and "RemoteControl" inputs are only necessary if the locomotive is equipped with Remote Control capability; "Active" goes to the Pod Controller, "RemoteControl" to a separate toggled button.
+    #The "UsingRearSeat" input  is only necessary if the locomotive features Dual Cabs or Dual Control Stands.
+    
+    #Config
+    
+    #Pick a Control Scheme File! You can find them in "ptgamma/controls/" !
+    #include "ptgamma/controls/standard"
+    
+    AirBrakeMode = 2
+    #0 - Simple Self-Lapping (Easy)
+    #1 - Simple Manual Lapping (Medium)
+    #2 - 26L Self-Lapping (Medium-Hard)
+    #3 - 24RL Manual Lapping (Hard)
+    #4 - No. 6 (6SL/6BL/6DS/6ET) Manual Lapping (Hard)
+    #24RL, No. 6, and 26L are the hardest, but also the most rewarding!
+
+    LocoBrakeMode = 0 #0 for Self Lapping, 1 for Manual Lapping
+    
+    CommandThrottle=0
+    CommandDynamic=0
+    CommandAutobrake=0
+    CommandIndependentbrake=0
+
+    InitialReduction = 6 #If using 24RL or 26L brake modes, the train brake will automatically drop this much pressure in First Service or Initial Reduction positions.
+    FeedPressure = 90 #Feed Valve pressure in PSI. 70 was the standard until the 1950s, 90 is the standard for freight. 110 is the passenger standard, 120 is sometimes used by mountain railroads.
+    
+    NotchedThrottle = 1 #0 for Continuous Throttle, 1 for Notched Throttle
+    NumThrottleNotches = 8 #Number of Throttle Notches, not counting idle (If Used).
+    
+    HasDynamics = 1 #1 for Has Dynamic Brakes, 0 for Doesn't Have Dynamic Brakes
+    
+    NotchedDynamics = 0 #0 for Continuous Dynamic Brakes, 1 for Notched Dynamic Brakes
+    
+    TransitionMode = 1 #0 for No Transition, 1 for Transition
+    TransitionControlType = 2 #0 for MANUAL Transition, 1 for Automatic Transition With Selector, 2 for Fully Automatic Transition
+
+    #Sounds (Don't touch unless you know what you're doing!)
+
+    Lever_Throttle    = "rlc_delta/cstands/throttle/U8.wav"
+    Lever_ReverserF  = "rlc_delta/cstands/reverser/rev_cntr_fwd.wav"      
+    Lever_ReverserN = "rlc_delta/cstands/reverser/rev_fwd_cntr.wav"
+    Lever_ReverserB = "rlc_delta/cstands/reverser/rev_cntr_rev.wav"
+
+    Lever_24RL = "rlc_delta/cstands/26l_air/tb_lever.wav"
+    Lever_26L = "rlc_delta/cstands/26l_air/tb_lever.wav"
+
+    AirBrakeApply   = "rlc_delta/cstands/26l_air/ab_apply.wav"
+    AirBrakeRelease = "rlc_delta/cstands/26l_air/ab_release.wav"
+    AirBrakeDump    = "rlc_delta/cstands/26l_air/emergency.wav"
+
+    LocoBrakeFull           = "rlc_delta/cstands/26l_air/tb_lever.wav"
+    LocoBrakeReleaseSoft    = "rlc_delta/cstands/26l_air/tb_release_soft.wav"
+    LocoBrakeReleaseHard    = "rlc_delta/cstands/26l_air/tb_release_hard.wav"
+
+    WarningHiss = "gsgtrainsounds/misc/desktop/horn_air_loop.wav"
+    WarningHissEnd = "gsgtrainsounds/misc/desktop/horn_air_end.wav"
+    
+    FLC=0
+    RLC=0
+    
+    CS = ControlStand:entity()
+    
+    CS:setBodygroup(1,4)
+    CS:setBodygroup(2,10)
+    CS:setBodygroup(3,10)
+    CS:setBodygroup(4,12)
+    CS:setBodygroup(5,8)
+    CS:setBodygroup(6,0)
+
+    CS:setSubMaterial(4,"models/proppertextures/abs_plastic_black")
+    CS:setSubMaterial(5,"models/proppertextures/invisible")
+    CS:setSubMaterial(6,"models/proppertextures/invisible")
+    CS:setSubMaterial(7,"models/proppertextures/invisible")
+    CS:setSubMaterial(8,"models/proppertextures/invisible")
+    CS:setSubMaterial(9,"models/proppertextures/invisible")
+    CS:setSubMaterial(10,"models/proppertextures/invisible")
+    CS:setSubMaterial(11,"models/proppertextures/invisible")
+    CS:setSubMaterial(13,"models/proppertextures/invisible")
+    CS:setSubMaterial(15,"models/proppertextures/invisible")
+    CS:setSubMaterial(16,"models/proppertextures/invisible")
+    CS:setSubMaterial(17,"models/proppertextures/invisible")
+    CS:setSubMaterial(18,"models/proppertextures/invisible")
+    CS:setSubMaterial(19,"models/proppertextures/invisible")
+    
+    #Holos
+    A=1
+    holoCreate(A,CS:toWorld(vec(-15.75,-20.2,12.6)),vec(1),CS:toWorld(ang(0,0,0)),vec(255),"models/rlc_delta_lua/cstands/nyab_knorr_stand_mid.mdl")
+    holoParent(A,CS)
+
+    A=2
+    holoCreate(A,CS:toWorld(vec(-13.25,-3.35,14.85)),vec(1.01),CS:toWorld(ang(0,-10.25,0)),vec(255),"models/rlc_delta_lua/cstands/kc108_plate.mdl")
+    holoParent(A,CS)
+
+    A=3
+    holoCreate(A,CS:toWorld(vec(-14.25,-13.5,22.75)),vec(1),CS:toWorld(ang(0,-90,-45)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
+    holoParent(A,CS)
+
+    A=4
+    holoCreate(A,CS:toWorld(vec(-15.35, -22.985, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/rotary switch labels/back_light_ditch")
+    holoBodygroup(A,1,4)
+
+    A=6
+    holoCreate(A,CS:toWorld(vec(-15.35, -17.5, 4.35)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switches.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,4)
+
+    A=7
+    holoCreate(A,CS:toWorld(vec(-14.793,-13.5,19-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/800t style buttons.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoColor(A,vec(50,150,50))
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/acrylic")    
+    holoEntity(A):setSubMaterial(3,"models/proppertextures/acrylic")
+
+    A=8
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19-3-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,2,5)
+
+
+    A=9
+    holoCreate(A,CS:toWorld(vec(-15,-13.5,19-6-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
+    holoBodygroup(A,1,1)
+    holoParent(A,CS)
+
+    A=10
+    holoCreate(A,CS:toWorld(vec(-14.793,-13.5,19-9-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/800t style buttons.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,7)
+    holoColor(A,vec(150,125,50))
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/acrylic")    
+    holoEntity(A):setSubMaterial(3,"models/proppertextures/acrylic")    
+
+    A=11
+    holoCreate(A,CS:toWorld(vec(-15,-13.5,19-12-0.4)),vec(1),CS:toWorld(ang(90,90,90)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
+    holoBodygroup(A,1,1)
+    holoParent(A,CS)
+
+    A=12
+    holoCreate(A,CS:toWorld(vec(-14.78,-13.5,19-15-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+
+    A=13
+    holoCreate(A,CS:toWorld(vec(-11.1-0.25, 7.597-1, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,0,0)
+    holoEntity(A):setSubMaterial(5,"models/indicators/ind_enginerun_unlit")
+    holoEntity(A):setSubMaterial(4,"models/indicators/ind_gen_unlit")
+    holoEntity(A):setSubMaterial(3,"models/inqdicators/ind_control_unlit")
+
+    A=14
+    holoCreate(A,CS:toWorld(vec(-11.6-0.25, 6.6-1, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,2,5)  
+    holoBodygroup(A,3,1) 
+
+    A=15
+    holoCreate(A,CS:toWorld(vec(-11.4-0.25, 7.7-1, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,2,5)  
+    holoBodygroup(A,3,1) 
+
+    A=16
+    holoCreate(A,CS:toWorld(vec(-11.2-0.25, 8.7-1, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,2,5) 
+    holoBodygroup(A,3,1) 
+
+    A=17
+    holoCreate(A,CS:toWorld(vec(-11.1+0.7, 7.597+4, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,0,0)
+    holoEntity(A):setSubMaterial(5,"models/indicators/ind_dyn_unlit")
+    holoEntity(A):setSubMaterial(4,"models/indicators/ind_gauge_unlit")
+    holoEntity(A):setSubMaterial(3,"models/indicators/ind_step_unlit")
+
+    A=18
+    holoCreate(A,CS:toWorld(vec(-11.6+0.7, 6.57+4, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,2,5) 
+    holoBodygroup(A,3,1) 
+
+    A=19
+    holoCreate(A,CS:toWorld(vec(-10.8+0.7, 7.55+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+
+    A=20
+    holoCreate(A,CS:toWorld(vec(-10.6+0.7, 8.6+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+
+    A=21
+    holoCreate(A,CS:toWorld(vec(-13.35,-13.5,22.1)),vec(0.8),CS:toWorld(ang(0,90,45)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,2)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/horn")
+
+    A=22
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-(1)+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,0)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/horn_sequencer")
+
+    A=23
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-4+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,0)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/eot_rear_emergency_brake")
+
+    A=24
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-7+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,0)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/bell")
+
+    A=25
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-10+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,0)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/alerter_reset")
+
+    A=26
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-13+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,0)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/force_sand") 
+
+    A=27
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-16+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,0)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/lead_sand")    
+
+    A=28
+    holoCreate(A,CS:toWorld(vec(0)),vec(1),CS:toWorld(ang(0,0,0)),vec(255),"models/floofy/trainparts/cab_parts/ge/cab_control_stands/ge_kc108/type1/type1_knorr.mdl")
+    holoParent(A,CS)
+    for(I=1,18,1){
+        holoEntity(A):setSubMaterial(I,"models/proppertextures/invisible")
+    }
+    holoEntity(A):setSubMaterial(8,"models/proppertextures/aluminum")
+    holoClip(A,1,vec(0, 0, 5),vec(0, 0, -1),0)
+    holoClipEnabled(A,1,1)
+
+    A=29
+    holoCreate(A,CS:toWorld(vec(-15.35, -22.985, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+
+    A=30
+    holoCreate(A,CS:toWorld(vec(-15.35, -17.5, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-25.08,-10.82,20.85)),vec(1),CS:toWorld(ang(180,90,-90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-25.08,-10.82,17.1)),vec(1),CS:toWorld(ang(180,90,-90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-25.08,-10.84,13.33)),vec(1),CS:toWorld(ang(180,90,-90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.29,11.59,14.75)),vec(1,1,1),CS:toWorld(ang(0,79,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
+    holoParent(A,CS)
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-11.36,6.62,14.74)),vec(1,1,1),CS:toWorld(ang(0,-101,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(3,"models/monkcabdetailpack/indwaffle/ind_unlit")
+    holoEntity(A):setSubMaterial(4,"models/monkcabdetailpack/indwaffle/ind_unlit")
+    holoEntity(A):setSubMaterial(5,"models/monkcabdetailpack/indwaffle/ind_unlit")
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-11.36,5.49,15.2)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-11.16,6.57,15.2)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.95,7.64,15.2)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.34,11.58,15.5)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/800t style lamps.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/glass_opaque_unlit")
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/glass_opaque_unlit")
+    holoColor(A,vec(159,25,25))
+
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.31,11.6,14.22)),vec(1,1,1),CS:toWorld(ang(0,-101,-90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoBodygroup(A,2,1)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+
+    A++
+    holoCreate(A,CS:toWorld(vec(-13.97,-7.97,6.94)),vec(1.5,1.25,1),CS:toWorld(ang(0,80,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/ground_reset")
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-13.52,-5.08,6.95)),vec(1,1,1),CS:toWorld(ang(0,80,90)),vec(255),"models/ryan's detail pack/800t style buttons.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/plastic_black")
+
+    RevBone = holoEntity(2):boneIndex("reverser")
+    ThrBone = holoEntity(2):boneIndex("throttle")
+    DynBone = holoEntity(2):boneIndex("dynamic")
+
+    TBBone = 1
+    LBBone = 2
+    LBHBone = 3
+    
+    function vector linpos(V1:vector, V2:vector, P){
+        return V1 + P*(V2-V1)
+    }
+
+    function normal adc(MinVal, MaxVal, Resolution, Input){
+        local Output = 0
+        if(inrange(Input,MinVal,MaxVal)){
+            Output = round(Resolution*((Input - MinVal)/(MaxVal-MinVal)))
+            
+        }elseif(Input < MinVal){
+            Output = 0
+        }elseif(Input > MaxVal){
+            Output = Resolution
+        }
+        
+        return Output
+    }
+    
+    function normal dac(MinVal, MaxVal, Resolution, Input){
+        local Output = 0
+        if(inrange(Input,0,Resolution)){
+            Input = round(Input)
+            Output = (MaxVal - MinVal)*(Input/Resolution) + MinVal
+        }elseif(Input < 0){
+            Output = MinVal
+        }elseif(Input > Resolution){
+            Output = MaxVal
+        }
+        return Output
+    }
+    
+    function void printProper(Message:string){
+        local Engr = Pod:driver()
+        if(Engr:isValid()){
+            Pod:printDriver(Message)
+        }
+        if(Engr != owner()){
+            print(Message)
+        }
+        return void
+    }
+    
+    
+    
+    ControlPrintOrder = array(
+        "ReverserF",
+        "ReverserB",
+        "IncreaseThrottle",
+        "DecreaseThrottle",
+        "IncreaseDynamics",
+        "DecreaseDynamics",
+        "SelectorUp",
+        "SelectorDown",
+        "IncreaseTrainBrake",
+        "DecreaseTrainBrake",
+        "IncreaseLocoBrake",
+        "DecreaseLocoBrake",
+        "EmergencyBrake",
+        "HandBrake",
+        "Sander",
+        "UseButtons"
+    )
+    
+    #Controls Init
+    foreach(K,V:string = Controls){
+        if(V:find(" +Shift")){
+            Routing[K,number] = 1
+            local EXP = V:explode(" ")
+            Controls[K,string] = EXP[1,string]
+        }else{
+            Routing[K,number] = 0
+        }
+    }
+    
+    
+    CtlTable["AirBrakeMode",number] = AirBrakeMode
+    CtlTable["InitialReduction",number] = InitialReduction
+    CtlTable["NotchedThrottle",number] = NotchedThrottle
+    CtlTable["NumThrottleNotches",number] = NumThrottleNotches
+    CtlTable["NotchedDynamics",number] = NotchedDynamics
+    CtlTable["TransitionMode",number] = TransitionMode
+    CtlTable["TransitionControlType",number] = TransitionControlType
+    
+    if(AirBrakeMode==2){#26L
+        SetBrakeNotch = 2
+    }
+    LocoBrakeNotch = 0
+    
+    #Control Stand Init
+    CtlTable["CTL_Version",string] = CTL_Version
+    setName("Ryan's GE Evolution Series Stand V2")
+    runOnChat(1)
+    timer("clk",50)
+}
+if(MU_Master){
+            
+    #MASTER MODE
+    local Driver = noentity()
+    local PodDriver = Pod:driver()
+    if(RemoteControl | RemoteMode){
+        if(Active & !PodDriver){
+            Driver = owner()
+        }
+    }else{
+        Driver = Pod:driver()
+    }
+    if(Driver & !DriverQ){
+        DriverQ = 1
+        runOnKeys(Driver,1)
+    }elseif(!Driver & DriverQ){
+        DriverQ = 0
+        runOnKeys(DriverOld,0)
+    }
+    DriverOld = Driver
+    
+    if(keyClk(Driver)){
+        local Shifting = Driver:keyPressed(Shift)
+        
+        UseButton = Driver:keyPressed(Controls["UseButton",string]) & (Routing["UseButton",number] ? Shifting : !Shifting)
+        
+        if(!UseButton){
+        
+            local RF = UsingRearSeat ? "ReverserB" : "ReverserF"
+            local RB = UsingRearSeat ? "ReverserF" : "ReverserB"
+            
+            ReverserF = Driver:keyPressed(Controls[RF,string]) & (Routing[RF,number] ? Shifting : !Shifting)
+            ReverserB = Driver:keyPressed(Controls[RB,string]) & (Routing[RB,number] ? Shifting : !Shifting)
+            
+            IncreaseThrottle = Driver:keyPressed(Controls["IncreaseThrottle",string]) & (Routing["IncreaseThrottle",number] ? Shifting : !Shifting)
+            DecreaseThrottle = Driver:keyPressed(Controls["DecreaseThrottle",string]) & (Routing["DecreaseThrottle",number] ? Shifting : !Shifting)
+            
+            IncreaseTrainBrake = Driver:keyPressed(Controls["IncreaseTrainBrake",string]) & (Routing["IncreaseTrainBrake",number] ? Shifting : !Shifting)
+            DecreaseTrainBrake = Driver:keyPressed(Controls["DecreaseTrainBrake",string]) & (Routing["DecreaseTrainBrake",number] ? Shifting : !Shifting)
+            
+            IncreaseLocoBrake = Driver:keyPressed(Controls["IncreaseLocoBrake",string]) & (Routing["IncreaseLocoBrake",number] ? Shifting : !Shifting)
+            DecreaseLocoBrake = Driver:keyPressed(Controls["DecreaseLocoBrake",string]) & (Routing["DecreaseLocoBrake",number] ? Shifting : !Shifting)
+            
+            IncreaseDynamics = Driver:keyPressed(Controls["IncreaseDynamics",string]) & (Routing["IncreaseDynamics",number] ? Shifting : !Shifting)
+            DecreaseDynamics = Driver:keyPressed(Controls["DecreaseDynamics",string]) & (Routing["DecreaseDynamics",number] ? Shifting : !Shifting)
+            
+            EmergencyBrake = Driver:keyPressed(Controls["EmergencyBrake",string]) & (Routing["EmergencyBrake",number] ? Shifting : !Shifting)
+            
+            HandBrake = Driver:keyPressed(Controls["HandBrake",string]) & (Routing["HandBrake",number] ? Shifting : !Shifting)
+            Sander = Driver:keyPressed(Controls["Sander",string]) & (Routing["Sander",number] ? Shifting : !Shifting)
+            
+            SelectorUp = Driver:keyPressed(Controls["SelectorUp",string]) & (Routing["SelectorUp",number] ? Shifting : !Shifting)
+            SelectorDown = Driver:keyPressed(Controls["SelectorDown",string]) & (Routing["SelectorDown",number] ? Shifting : !Shifting)
+            
+        }
+    }
+}else{
+    if(DriverQ){
+        DriverQ = 0
+        runOnKeys(owner(),0)
+    }
+}
+if(clk("clk")){
+    local Tick = 1
+    Dynamics = SetDynamics>0
+    
+    #Throttle
+    if(!Dynamics){
+        if(NotchedThrottle){
+            if(IncreaseThrottle & !NQ & (Notch<NumThrottleNotches)){
+                NQ = 1
+                Notch++
+                soundStop(1)
+                Pod:soundPlay(1,0.5,"rlc_delta/cstands/throttle/U"+Notch+".wav")
+                #Pod:soundPlay(1,0.5,Lever_Throttle)
+            }elseif(DecreaseThrottle & !NQ & (Notch>0)){
+                NQ = 1
+                Notch--
+                soundStop(1)
+                Pod:soundPlay(1,0.5,"rlc_delta/cstands/throttle/D"+Notch+".wav")
+            }elseif(!IncreaseThrottle & !DecreaseThrottle & NQ){
+                NQ = 0
+                #soundStop(1)
+            }
+            SetThrottle = dac(0,100,NumThrottleNotches,Notch)
+        }else{
+            SetThrottle += (IncreaseThrottle - DecreaseThrottle)*5
+            SetThrottle = clamp(SetThrottle,0,100)
+            Notch = adc(0,100,NumThrottleNotches,SetThrottle)
+        }
+    }
+    
+    #Hump Control
+    
+    SetHumpMul = ->HumpMultiplier ? HumpMultiplier : 1
+    
+    #Dynamic Brakes
+    if((SetThrottle==0) & HasDynamics & (abs(SetReverser)==1)){
+        if((SetDynamics==0) & IncreaseDynamics & !DNQ){
+            DNQ = 1
+            DynaNotch = 0
+            SetDynamics = 10
+            soundStop(1)
+            Pod:soundPlay(1,0.5,"rlc_delta/cstands/throttle/D7.wav")
+            #Pod:soundPlay(1,0.5,Lever_Throttle)
+        }elseif((SetDynamics==10) & DecreaseDynamics & !DNQ){
+            DNQ = 1
+            DynaNotch = -1
+            SetDynamics = 0
+            soundStop(1)
+            Pod:soundPlay(1,0.5,"rlc_delta/cstands/throttle/D0.wav")
+            #Pod:soundPlay(1,0.5,Lever_Throttle)
+        }
+        
+        if(Dynamics & NotchedDynamics){
+            if(IncreaseDynamics & !DNQ & (DynaNotch<NumThrottleNotches)){
+                DNQ = 1
+                DynaNotch++
+                soundStop(1)
+                Pod:soundPlay(1,0.5,Lever_Throttle)
+            }elseif(DecreaseDynamics & !DNQ & (DynaNotch>-1)){
+                DNQ = 1
+                DynaNotch--
+                soundStop(1)
+                Pod:soundPlay(1,0.5,Lever_Throttle)
+            }
+            if(DynaNotch>-1){SetDynamics = dac(10,100,NumThrottleNotches,DynaNotch)}
+        }elseif(Dynamics){
+            if(IncreaseDynamics & (SetDynamics<100) & !DNQ){
+                SetDynamics++
+                if(SetDynamics>100){SetDynamics=100}
+            }elseif(DecreaseDynamics & (SetDynamics>10)){
+                DNQ = 1
+                SetDynamics--
+                if(SetDynamics<10){SetDynamics=10,DNQ=1}
+            }
+            DynaNotch = adc(10,100,NumThrottleNotches,SetDynamics)
+        }
+        if(!IncreaseDynamics & !DecreaseDynamics & DNQ){
+            DNQ = 0
+        }
+    }
+    
+    #Selector
+    if((TransitionMode==1) & (TransitionControlType<2)){
+        if(SelectorUp & !TransitionQ){
+            TransitionQ = 1
+            if(SetSelector<4){
+                SetSelector++
+                soundStop(1)
+                Pod:soundPlay(1,0.5,Lever_Throttle)
+            }
+        }elseif(SelectorDown & !TransitionQ){
+            TransitionQ = 1
+            if(SetSelector>0){
+                SetSelector--
+                soundStop(1)
+                Pod:soundPlay(1,0.5,Lever_Throttle)
+            }
+        }elseif(!SelectorUp & !SelectorDown & TransitionQ){
+            TransitionQ = 0
+        }
+        
+    }
+    
+    #Reverser
+   
+    if((SetThrottle==0) & (!Dynamics) & ReverserInsert){
+        if(ReverserF & !RevQ & (SetReverser<1)){
+            RevQ = 1
+            SetReverser++
+            soundStop(1)
+            Pod:soundPlay(1,0.5,(SetReverser==0) ? "rlc_delta/cstands/reverser/rev_fwd_cntr.wav" : "rlc_delta/cstands/reverser/rev_cntr_fwd.wav")
+        }elseif(ReverserB & !RevQ & (SetReverser>-1)){
+            RevQ = 1
+            SetReverser--
+            soundStop(1)
+            Pod:soundPlay(1,0.5,(SetReverser==0) ? "rlc_delta/cstands/reverser/rev_rev_cntr.wav" : "rlc_delta/cstands/reverser/rev_cntr_rev.wav")
+        }elseif(!ReverserF & !ReverserB & RevQ){
+            RevQ = 0
+        }
+    }
+    
+    #Train Brakes
+    local FSP = FeedPressure*64/90 #Full Service Point
+    
+    if(AirBrakeMode==4){ #6SL
+        #0-Release
+        #1-Running
+        #2-Holding
+        #3-Lap
+        #4-Service
+        #6-Emergency
+        if(IncreaseTrainBrake & (SetBrakeNotch < 4) & !ABQ){
+            ABQ = 1
+            SetBrakeNotch++
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_24RL)
+            if(SetBrakeNotch==4 & (SetEqualRes>FSP) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeApply)
+                timer("EndHiss",6000)
+            }
+        }elseif(DecreaseTrainBrake & (SetBrakeNotch > 0) & !ABQ){
+            ABQ = 1
+            if(SetBrakeNotch==6){
+                SetBrakeNotch=4
+            }else{
+                SetBrakeNotch--
+            }
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_24RL)
+            if(SetBrakeNotch<=1 & (SetEqualRes<FeedPressure) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeRelease)
+                timer("EndHiss",6000)
+            }
+        }elseif(!IncreaseTrainBrake & !DecreaseTrainBrake & ABQ){
+            #soundStop(3)
+            ABQ = 0
+        }
+        switch(SetBrakeNotch){
+            case 0, #Release
+                if(SetEqualRes<FeedPressure){
+                    SetEqualRes+=0.5
+                    if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+                }
+                break
+            case 1, #Running
+                if(SetEqualRes<FeedPressure){
+                    SetEqualRes+=0.5
+                    if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+                }
+                break
+            case 2, #Holding
+                if(SetEqualRes<FeedPressure){
+                    SetEqualRes+=0.5
+                    if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+                }
+                break
+            case 4, #Service
+                if(SetEqualRes>FSP){
+                    SetEqualRes-=0.5
+                    if(SetEqualRes<FSP){SetEqualRes=FSP}
+                }
+                break
+            default,
+                break
+        }
+    }elseif(AirBrakeMode==3){ #24RL
+        #0-Release
+        #1-Running
+        #2-First Service
+        #3-Lap
+        #4-Service
+        #6-Emergency
+        if(IncreaseTrainBrake & (SetBrakeNotch < 4) & !ABQ){
+            ABQ = 1
+            SetBrakeNotch++
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_24RL)
+            if(SetBrakeNotch==4 & (SetEqualRes>FSP) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeApply)
+                timer("EndHiss",6000)
+            }elseif(SetBrakeNotch==2 & (SetEqualRes>(FeedPressure-InitialReduction))){
+                SetEqualRes = FeedPressure-InitialReduction
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeApply)
+                timer("EndHiss",6000)
+            }
+        }elseif(DecreaseTrainBrake & (SetBrakeNotch > 0) & !ABQ){
+            ABQ = 1
+            if(SetBrakeNotch==6){
+                SetBrakeNotch=4
+            }else{
+                SetBrakeNotch--
+            }
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_24RL)
+            if(SetBrakeNotch<=1 & (SetEqualRes<FeedPressure) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeRelease)
+                timer("EndHiss",6000)
+            }
+        }elseif(!IncreaseTrainBrake & !DecreaseTrainBrake & ABQ){
+            #soundStop(3)
+            ABQ = 0
+        }
+        switch(SetBrakeNotch){
+            case 0, #Release
+                if(SetEqualRes<FeedPressure){
+                    SetEqualRes+=0.5
+                    if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+                }
+                break
+            case 1, #Running
+                if(SetEqualRes<FeedPressure){
+                    SetEqualRes+=0.5
+                    if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+                }
+                break
+            case 4, #Service
+                if(SetEqualRes>FSP){
+                    SetEqualRes-=0.5
+                    if(SetEqualRes<FSP){SetEqualRes=FSP}
+                }
+                break
+            default,
+                break
+        }
+        
+    }elseif(AirBrakeMode==2){#26L
+    #0-Release
+    #1-Minimum Reduction / Service
+    #2-Suppression
+    #6-Emergency
+        if(IncreaseTrainBrake){
+            if(!ABQ){
+                ABQ = 1
+                if(SetBrakeNotch==0){
+                    Lock_26L = 1
+                    SetBrakeNotch=1
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_24RL)
+                    SetEqualRes = FeedPressure-InitialReduction
+                }elseif((SetBrakeNotch==1) & (SetEqualRes>FSP)){
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_26L)
+                }elseif((SetBrakeNotch==1) & (SetEqualRes==FSP)){
+                    SetBrakeNotch=2
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_24RL)
+                    Suppression = 1
+                }
+                if(!HissQ & (SetEqualRes>FSP)){
+                    HissQ = 1
+                    Pod:soundPlay(2,6,AirBrakeApply)
+                    timer("EndHiss",6000)
+                }
+            }
+            if((SetBrakeNotch==1) & (SetEqualRes>FSP) & !Lock_26L){
+                SetEqualRes-=0.5
+                if(SetEqualRes<FSP){SetEqualRes=FSP}
+            }
+        }elseif(DecreaseTrainBrake){
+            if(!ABQ){
+                ABQ = 1
+                if((SetBrakeNotch==1) & (SetEqualRes==(FeedPressure-InitialReduction))){
+                    SetBrakeNotch=0
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_24RL)
+                    SetEqualRes = FeedPressure
+                    if(!HissQ){
+                        HissQ = 1
+                        Pod:soundPlay(2,6,AirBrakeRelease)
+                        timer("EndHiss",6000)
+                    }
+                }elseif((SetBrakeNotch==1) & (SetEqualRes<FeedPressure)){
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_26L)
+                    if(!HissQ & (SetEqualRes<FeedPressure)){
+                        HissQ = 1
+                        Pod:soundPlay(2,6,AirBrakeRelease)
+                        timer("EndHiss",6000)
+                    }
+                }elseif((SetBrakeNotch==2)){
+                    Lock_26L = 1
+                    SetBrakeNotch=1
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_24RL)
+                    Suppression = 0
+                }elseif(SetBrakeNotch==6){
+                    SetBrakeNotch=2
+                    soundStop(1)
+                    Pod:soundPlay(1,0.5,Lever_24RL)
+                    Suppression = 1
+                }
+                
+            }
+            if((SetBrakeNotch==1) & (SetEqualRes<(FeedPressure-InitialReduction)) & !Lock_26L){
+                SetEqualRes+= 1.5 #Triple Release Speed
+                if(SetEqualRes>=(FeedPressure-InitialReduction)){
+                    SetEqualRes = FeedPressure - InitialReduction
+                    ABQ = 0
+                    }
+            }
+        }elseif(!IncreaseTrainBrake & !DecreaseTrainBrake & ABQ){
+            ABQ = 0
+            Lock_26L = 0
+        }
+    }elseif(AirBrakeMode==1){#Simple Manual Lapping
+    #0-Release
+    #1-Lap
+    #2-Apply
+    #6-Emergency
+        if(IncreaseTrainBrake & !ABQ & (SetBrakeNotch<2)){
+            ABQ = 1
+            SetBrakeNotch++
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_24RL)
+            if((SetBrakeNotch==2) & (SetEqualRes>FSP) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeApply)
+                timer("EndHiss",6000)
+            }
+        }elseif(DecreaseTrainBrake & !ABQ & (SetBrakeNotch>0)){
+            ABQ = 1
+            if(SetBrakeNotch==6){
+                SetBrakeNotch=2
+            }else{
+                SetBrakeNotch--
+            }
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_24RL)
+            if((SetBrakeNotch==0) & (SetEqualRes<FeedPressure) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeRelease)
+                timer("EndHiss",6000)
+            }
+        }elseif(!IncreaseTrainBrake & !DecreaseTrainBrake & ABQ){
+            ABQ = 0
+        }
+        
+
+        if((SetBrakeNotch==2) & (SetEqualRes>FSP)){
+            SetEqualRes-=0.25
+            if(SetEqualRes<FSP){SetEqualRes=FSP}
+        }elseif((SetBrakeNotch==0) & (SetEqualRes<FeedPressure)){
+            SetEqualRes+=0.25
+            if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+        }
+        
+    }else{#Simple Self Lapping
+            
+    #Lol what notches?
+    #0-Service Region
+    #6-Emergency
+        if(IncreaseTrainBrake & !ABQ){
+            ABQ = 1
+            soundStop(1)
+            Pod:soundPlay(1,0.5,Lever_26L)
+            if((SetEqualRes>FSP) & !HissQ){
+                HissQ = 1
+                Pod:soundPlay(2,6,AirBrakeApply)
+                timer("EndHiss",6000)
+            }
+        }elseif(DecreaseTrainBrake & !ABQ){
+            ABQ = 1
+            if(SetBrakeNotch==6){
+                SetBrakeNotch = 0
+                soundStop(1)
+                Pod:soundPlay(1,0.5,Lever_24RL)
+            }else{
+                soundStop(1)
+                Pod:soundPlay(1,0.5,Lever_26L)
+                if((SetEqualRes<FeedPressure) & !HissQ){
+                    HissQ = 1
+                    Pod:soundPlay(2,6,AirBrakeRelease)
+                    timer("EndHiss",6000)
+                }
+            }
+        }elseif(!IncreaseTrainBrake & !DecreaseTrainBrake & ABQ){
+            ABQ = 0
+        }
+
+            
+        if(IncreaseTrainBrake & (SetEqualRes>FSP)){
+            SetEqualRes-=0.25
+            BleedPressure = Bleeding ? 0 : FeedPressure
+            if(SetEqualRes<FSP){SetEqualRes=FSP}
+        }elseif(DecreaseTrainBrake & (SetEqualRes<FeedPressure)){
+            SetEqualRes+=0.25
+            if(SetEqualRes>FeedPressure){SetEqualRes=FeedPressure}
+        }
+        
+    }
+    
+    #Locomotive Brakes
+    if(!LocoBrakeMode){ #Self Lapping
+        if(IncreaseLocoBrake & (SetLocoBrakePressure<72)){
+            #if(BleedPressure<72){BleedPressure=72}
+            if(!LBQ){LBQ=1}
+            SetLocoBrakePressure+=2
+            if(SetLocoBrakePressure>60){
+                SetLocoBrakePressure = 72
+            }
+            if(SetLocoBrakePressure==72 & !LHissQ){
+                LHissQ = 1
+                soundStop(1)
+                Pod:soundPlay(1,0.5,LocoBrakeFull)
+                timer("EndHiss",500)
+            }
+        }elseif(DecreaseLocoBrake & (SetLocoBrakePressure>0)){
+            if(!LBQ){LBQ=1}
+            SetLocoBrakePressure-=2
+            if(SetLocoBrakePressure<0){SetLocoBrakePressure = 0}
+            if(!LHissQ){
+                LHissQ = 1
+                Pod:soundPlay(2,6,(SetLocoBrakePressure>30) ? LocoBrakeReleaseHard : LocoBrakeReleaseSoft)
+                timer("EndHiss",6000)
+            }
+        }elseif(DecreaseLocoBrake & (SetLocoBrakePressure==0) & !LBQ){
+            LBQ = 1
+            SetBleeding = 1
+            if((SetEqualRes<FeedPressure) & !LHissQ){
+                LHissQ = 1
+                Pod:soundPlay(2,6,(SetEqualRes<30) ? LocoBrakeReleaseHard : LocoBrakeReleaseSoft)
+                timer("EndHiss",6000)
+            }
+        }elseif(!IncreaseLocoBrake & !DecreaseLocoBrake & LBQ){
+            LBQ = 0
+            SetBleeding = 0
+        }
+
+    }else{ #Manual Lapping
+            
+        if(IncreaseLocoBrake & !LBQ & (SetLocoBrakeNotch<2)){
+            LBQ = 1
+            SetLocoBrakeNotch++
+            if(SetLocoBrakeNotch==2){
+                soundStop(1)
+                Pod:soundPlay(1,0.5,LocoBrakeFull)
+                #BleedPressure = 72
+            }
+        }elseif(DecreaseLocoBrake & !LBQ & (SetLocoBrakeNotch>0)){
+            LBQ = 1
+            SetLocoBrakeNotch--
+            if((SetLocoBrakeNotch<=0) & (SetLocoBrakePressure>0) & !LHissQ){
+                LHissQ = 1
+                Pod:soundPlay(2,6,(SetLocoBrakePressure>30) ? LocoBrakeReleaseHard : LocoBrakeReleaseSoft)
+                timer("EndHiss",6000)
+            }
+        }elseif(DecreaseLocoBrake & !LBQ & (SetLocoBrakeNotch==0)){
+            LBQ = 1
+            SetBleeding = 1
+            if((SetLocoBrakeNotch<=0) & (SetEqualRes<FeedPressure) & !LHissQ){
+                LHissQ = 1
+                Pod:soundPlay(2,6,(SetEqualRes<60) ? LocoBrakeReleaseHard : LocoBrakeReleaseSoft)
+                timer("EndHiss",6000)
+            }
+        }elseif(!IncreaseLocoBrake & !DecreaseLocoBrake & LBQ){
+            LBQ = 0
+            SetBleeding = 0
+            
+        }
+       
+        if(SetBleeding & (SetLocoBrakePressure>0)){
+            SetLocoBrakePressure-=4
+            if(SetLocoBrakePressure<0){SetLocoBrakePressure=0}
+        }elseif((SetLocoBrakeNotch==2) & (SetLocoBrakePressure<72)){
+            SetLocoBrakePressure+=2
+            if(SetLocoBrakePressure>72){SetLocoBrakePressure=72}
+        }elseif((SetLocoBrakeNotch<=0) & (SetLocoBrakePressure>0)){
+            SetLocoBrakePressure-=2
+            if(SetLocoBrakePressure<0){SetLocoBrakePressure=0}
+        }
+        
+    }
+    
+    #Emergency Brake
+    
+    if(EmergencyBrake | EmBrake){
+
+        SetEqualRes = 0
+        
+        SetThrottle = 0
+        Notch = 0
+        SetDynamics = 0
+        DynaNotch = 0
+        SetLocoBrakePressure = 72
+        SetBrakeNotch = 6
+        
+    }
+        
+    #Control Stand
+    
+    #Reverser
+    holoEntity(2):setBoneAngRelative(RevBone,ang(15*SetReverser,0,0))
+    #Throttle
+    holoEntity(2):setBoneAngRelative(ThrBone,ang(Dynamics ? 0 : -85*(Notch/8),0,0))
+    #Dynamic Brakes
+    holoEntity(2):setBoneAngRelative(DynBone,ang(Dynamics ? -93*(-SetDynamics/100) : 0,0,0))
+    #Train Brake
+    local TBB = 0
+
+    Autostart = SetReverser
+
+    TBB = select(SetBrakeNotch+1,0,adc(0,FeedPressure-InitialReduction - FeedPressure*64/FeedPressure,50,FeedPressure-InitialReduction-SetEqualRes)+30,110,0,0,0,125)
+    holoEntity(1):setBoneAngRelative(TBBone,ang(0,TBB/1.5,0))
+    #Loco Brake
+    local LBB = SetBleeding ? 0 : (SetLocoBrakePressure/72)*110
+    holoEntity(1):setBoneAngRelative(LBBone,ang(0,LBB/1.7,0))
+    holoEntity(1):setBoneAngRelative(LBHBone,ang(0,LBB/1.7,-SetBleeding*5))    
+    
+    timer("clk",50)
+}elseif(clk("EndHiss")){
+    HissQ = 0
+    LHissQ = 0
+}elseif(clk("PenaltyTimeout")){
+    PenaltyBrake = 0   
+}
+
+local InRelease = ((AirBrakeMode==3)|(AirBrakeMode==4)) & (SetBrakeNotch==0)
+if(InRelease & !WarningHissQ){
+    WarningHissQ = 1
+    CS:soundPlay(3,0,WarningHiss)
+}elseif(!InRelease & WarningHissQ){
+    WarningHissQ = 0
+    soundStop(3,0.125)
+}
+
+CtlTable["SetReverser",number] = SetReverser
+CtlTable["SetThrottle",number] = CommandThrottle ? CommandThrottle : SetThrottle #Throttle Control
+if(DynamicBrake){CtlTable["SetDynamics",number] = CommandDynamic ? CommandDynamic : SetDynamics}else{CtlTable["SetDynamics",number] = 0} #Dynamic Control
+CtlTable["SetSelector",number] = SetSelector
+CtlTable["SetBrakeNotch",number] = SetBrakeNotch
+CtlTable["SetEqualRes",number] = SetEqualRes * (100 - CommandAutobrake) / 100 #Autobrake Control
+CtlTable["SetHolding",number] = (AirBrakeMode==4)&(SetBrakeNotch==2)
+CtlTable["Overcharge",number] = (SetBrakeNotch==0) & ((AirBrakeMode==3)|(AirBrakeMode==4))
+CtlTable["FRC",number] = FullReleaseCock
+#CtlTable["SetLocoBrakeNotch",number] = SetLocoBrakeNotch
+CtlTable["SetLocoBrakePressure",number] = CommandIndependentbrake ?  CommandIndependentbrake : SetLocoBrakePressure #Independent Brake Control
+CtlTable["SetBleeding",number] = SetBleeding
+CtlTable["SetHumpMultiplier",number] = SetHumpMul
+CtlTable["SetFeedPressure",number] = FeedPressure
+CtlTable["EmergencyBrake",number] = EmergencyBrake
+CtlTable["HandBrake",number] = HandBrake
+CtlTable["Sander",number] = Sander
+
+if(chatClk(owner())|chatClk(Pod:driver())){
+    local Speaker = lastSpoke()
+    local Sentence = Speaker:lastSaid():explode(" ")
+    local CMD_PreNum = Sentence[1,string]
+    local CMD_S = CMD_PreNum:explode(":")
+    local CMD = CMD_S[1,string]
+    local NumberGiven = CMD_S[2,string]
+    local Num = Number:trim()
+    
+    local OnRun = 1#(On1 & Run)|(On2 & Run_DPM)
+    
+    
+    if((NumberGiven==Num) | NumberGiven==""){
+        switch(CMD){
+            case ".controls",
+                if(MU_Master){
+                    for(K=1,ControlPrintOrder:count()){
+                        local ControlName = ControlPrintOrder[K,string]
+                        local X = Controls[ControlName,string]
+                        if(Routing[ControlName,number]){
+                            printProper(ControlName + ": Shift + " + X)
+                        }else{
+                            printProper(ControlName + ": " + X)
+                        }
+                    }
+                }
+                hideChat(1)
+                break
+            case ".reverser",
+                if(MU_Master & OnRun){
+                    if(Dynamics){
+                        printProper("[RLCPT] Dynamic Brakes are On!")
+                    }elseif(SetThrottle>0){
+                        printProper("[RLCPT] Throttle is On!")
+                    }else{
+                        SetReverser = sign(Sentence[2,string]:toNumber())
+                        printProper("[RLCPT] Reverser set to " + SetReverser:toString() + ".")
+                    }
+                }
+                hideChat(1)
+                break
+            case ".throttle",
+                if(MU_Master & OnRun){
+                    if(Dynamics){
+                        printProper("[RLCPT] Dynamic Brakes are On!")
+                    }elseif(HEP_Notch==1){
+                        printProper("[RLCPT] HEP Mode is in Standby!")
+                    }else{
+                        if(NotchedThrottle){
+                            SetThrottle = clamp(dac(0,100,NumThrottleNotches,adc(0,100,NumThrottleNotches,Sentence[2,string]:toNumber())),0,100)
+                            Notch = adc(0,100,NumThrottleNotches,SetThrottle)
+                        }else{
+                            SetThrottle = clamp(Sentence[2,string]:toNumber(),0,100)
+                            Notch = adc(0,100,NumThrottleNotches,SetThrottle)
+                        }
+                        printProper("[RLCPT] Throttle set to " + SetThrottle + "%.")
+                    }
+                }
+                hideChat(1)
+                break
+            case ".notch",
+                if(MU_Master & OnRun){
+                    if(Dynamics){
+                        printProper("[RLCPT] Dynamic Brakes are On!")
+                    }elseif(HEP_Notch==1){
+                        printProper("[RLCPT] HEP Mode is in Standby!")
+                    }else{
+                        if(NotchedThrottle){
+                            Notch = clamp(round(Sentence[2,string]:toNumber()),0,NumThrottleNotches)
+                            SetThrottle = dac(0,100,NumThrottleNotches,Notch)
+                            printProper("[RLCPT] Throttle set to Notch " + Notch + ".")
+                            
+                        }else{
+                            printProper("[RLCPT] Throttle has no Notches!")
+                        }
+                        
+                    }
+                }
+                hideChat(1)
+                break
+            case ".dynamics",
+                if(MU_Master & OnRun){
+                    if(!HasDynamics){
+                        printProper("[RLCPT] Dynamic Brakes are not Enabled!")
+                    }elseif(!abs(SetReverser)){
+                        printProper("[RLCPT] Reverser is not Engaged!")
+                    }elseif(SetThrottle>0){
+                        printProper("[RLCPT] Throttle is not in Idle!")
+                    }else{
+                        local Set = clamp(Sentence[2,string]:toNumber(),0,100)
+                        SetDynamics = (Set<10) ? 0 : Set
+                        DynaNotch = (SetDynamics==0) ? -1 : adc(10,100,NumThrottleNotches,SetDynamics)
+                        
+                        #Dynamics = DynamicBrakingPower>0
+                        
+                        printProper("[RLCPT] Dynamic Brake set to " + SetDynamics + "%.")
+                    }
+                }
+                hideChat(1)
+                break
+            case ".dynanotch",
+                if(MU_Master & OnRun){
+                    if(NotchedDynamics){
+                        if(!HasDynamics){
+                            printProper("[RLCPT] Dynamic Brakes are not Enabled!")
+                        }elseif(!abs(SetReverser)){
+                            printProper("[RLCPT] Reverser is not Engaged!")
+                        }elseif(SetThrottle>0){
+                            printProper("[RLCPT] Throttle is not in Idle!")
+                        }else{
+                            local Set = clamp(round(Sentence[2,string]:toNumber()),-1,NumThrottleNotches)
+                            DynaNotch = Set
+                            SetDynamics = (Set==-1) ? 0 : dac(10,100,NumThrottleNotches,DynaNotch)
+                            
+                            #Dynamics = DynamicBrakingPower>0
+                            
+                            printProper("[RLCPT] Dynamic Brake set to Notch " + DynaNotch + " (" + SetDynamics + "%).")
+                        }
+                    }else{
+                        printProper("[RLCPT] Dynamic Brakes are not Notched!")
+                    }
+                }
+                hideChat(1)
+                break
+            case ".abset",
+                if(MU_Master & OnRun){
+                    local What = Sentence[2,string]
+                    if(What==""){
+                        SetEqualRes = 0
+                    				SetThrottle = 0
+                    				Notch = 0
+                    				SetDynamics = 0
+                    				SetBrakeNotch = 6
+                        printProper("[RLCPT] Setting Emergency Brake application!")
+                    }else{
+                        local Set = clamp(What:toNumber(),0,FeedPressure*64/90)
+                        switch(AirBrakeMode){
+                            case 4, #6SL
+                                if(Set==0){
+                                    SetEqualRes = FeedPressure
+                                    SetBrakeNotch = 1
+                                }else{
+                                    SetEqualRes = FeedPressure - Set
+                                    SetBrakeNotch = 3
+                                }
+                                break
+                            case 3, #24RL
+                                if(Set==0){
+                                    SetEqualRes = FeedPressure
+                                    SetBrakeNotch = 1
+                                }elseif(Set<InitialReduction){
+                                    SetEqualRes = FeedPressure - InitialReduction
+                                    SetBrakeNotch = 2
+                                }else{
+                                    SetEqualRes = FeedPressure - Set
+                                    SetBrakeNotch = 3
+                                }
+                                break
+                            case 2, #26L
+                                if(Set==0){
+                                    SetEqualRes = FeedPressure
+                                    SetBrakeNotch = 0
+                                }elseif(Set<InitialReduction){
+                                    SetEqualRes = FeedPressure - InitialReduction
+                                    SetBrakeNotch = 1
+                                }else{
+                                    SetEqualRes = FeedPressure - Set
+                                    SetBrakeNotch = 1
+                                }
+                                break
+                            case 1, #SML
+                                SetBrakeNotch = 1
+                                SetEqualRes = FeedPressure - Set
+                                break
+                            case 0, #SSL
+                                SetBrakeNotch = 0
+                                SetEqualRes = FeedPressure - Set
+                                break
+                        }
+                        printProper("[RLCPT] Setting " + (FeedPressure-SetEqualRes) + "lb application on train.")
+                    }
+                }
+                hideChat(1)
+                break
+			case ".brake",
+				if(MU_Master & OnRun){
+        SetEqualRes = 0
+        SetThrottle = 0
+        Notch = 0
+        SetDynamics = 0
+        SetBrakeNotch = 6
+        printProper("[RLCPT] Setting Emergency Brake application!")
+				}
+				hideChat(1)
+				break
+            case ".lbset",
+                local Set = clamp(Sentence[2,string]:toNumber(),0,72)
+                local ML = (AirBrakeMode==1)|(AirBrakeMode==3)|(AirBrakeMode==4)
+                SetLocoBrakePressure = Set
+                if(ML){SetLocoBrakeNotch=1}
+                printProper("[RLCPT] Setting " + (SetLocoBrakePressure) + "lb application on locomotive(s).")
+                
+                hideChat(1)
+                break
+            case ".remotemode",
+                if(MU_Master){
+                    RemoteMode = sign(Sentence[2,string]:toNumber())
+                    printProper("[RLCPT] Remote Control Mode set to " + RemoteMode + ".")
+                    hideChat(1)
+                }
+                break
+            case ".feedvalve",
+                if(Sentence[2,string]==""){
+                    print("[RLCPT] Your Feed Valve is currently set to "+FeedPressure+" PSI.")
+                }else{
+                    FeedPressure = clamp(Sentence[2,string]:toNumber(),70,120)
+                    print("[RLCPT] Your Feed Valve is now set to "+FeedPressure+" PSI.")
+                }
+                hideChat(1)
+                break
+            case ".fullreleasecock",
+                if(AirBrakeMode==3){
+                    if(Sentence[2,string]==""){
+                        FullReleaseCock = 0
+                    }else{
+                        FullReleaseCock = Sentence[2,string]:toNumber()
+                    }
+                    print("[RLCPT] Your Full Release Cock is now set to " + (FullReleaseCock ? "MR (1)." : "FV (0)."))
+                }else{
+                    print("[RLCPT] You don't have a Full Release Cock!")
+                }
+                
+                hideChat(1)
+                break
+            default,
+                if(CMD:index(1)=="."){
+                    local CMDL = CMD:lower()
+                    if("abcdefghijklmnopqrstuvwxyz":find(CMDL:index(2))){
+                        hideChat(1)
+                    }
+                }
+                break
+        }
+    }
+    
+}
+
+if(SetFeedPressure > 0){FeedPressure=SetFeedPressure}
+
+if(Horn & ~Horn){holoEntity(3):animate(1,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")}elseif(!Horn & ~Horn){holoEntity(3):animate(0,1),CS:soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")}
+
+if(BellToggle & ~BellToggle & Bell==0){
+    Bell=1,holoEntity(9):animate(1,1),holoEntity(9):soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")
+}elseif(BellToggle & ~BellToggle & Bell==1){
+    Bell=0,holoEntity(9):animate(2,1),holoEntity(9):soundPlay(0,1,"rlc_delta/cstands/bell_off.wav")
+}elseif(!BellToggle & ~BellToggle){holoEntity(9):animate(0,1)}
+
+if(AlertorReset & ~AlertorReset){holoEntity(10):animate(1,1),holoEntity(10):soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav"),timer(0.25,function(){holoEntity(10):animate(0,1)})}
+
+if(GaugeLight & ~GaugeLight){
+    holoEntity(19):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(19):animate(1,1)
+    holoEntity(13):setSubMaterial(5,"models/indicators/ind_enginerun_lit")
+    holoEntity(13):setSubMaterial(4,"models/indicators/ind_gen_lit")
+    holoEntity(13):setSubMaterial(3,"models/indicators/ind_control_lit")
+    holoEntity(17):setSubMaterial(5,"models/indicators/ind_dyn_lit")
+    holoEntity(17):setSubMaterial(4,"models/indicators/ind_gauge_lit")
+    holoEntity(17):setSubMaterial(3,"models/indicators/ind_step_lit")
+}elseif(!GaugeLight & ~GaugeLight){
+    holoEntity(19):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(19):animate(0,1)
+    holoEntity(13):setSubMaterial(5,"models/indicators/ind_enginerun_unlit")
+    holoEntity(13):setSubMaterial(4,"models/indicators/ind_gen_unlit")
+    holoEntity(13):setSubMaterial(3,"models/inqdicators/ind_control_unlit")
+    holoEntity(17):setSubMaterial(5,"models/indicators/ind_dyn_unlit")
+    holoEntity(17):setSubMaterial(4,"models/indicators/ind_gauge_unlit")
+    holoEntity(17):setSubMaterial(3,"models/indicators/ind_step_unlit")
+}
+
+if(StepLight & ~StepLight){
+    holoEntity(20):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(20):animate(1,1)
+}elseif(!StepLight & ~StepLight){
+    holoEntity(20):soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    holoEntity(20):animate(0,1)
+}
+
+if(Sander & ~Sander){
+    holoEntity(11):soundPlay(0,1,"rlc_delta/cstands/bell_on.wav")
+    holoEntity(11):animate(1,1)
+}elseif(!Sander & ~Sander){
+    holoEntity(11):soundPlay(0,1,"rlc_delta/cstands/bell_off.wav")
+    holoEntity(11):animate(0,1)
+}
+
+if(FrontLightCycle & ~FrontLightCycle){
+    holoEntity(6):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
+    FLC++,if(FLC == 4){FLC=0}
+    holoEntity(6):setBoneAngRelative(0,ang(-(44.9*FLC),0,0))
+    if(FLC==0){FrontLight=0,FrontDitchLight=0}
+    if(FLC==1){FrontLight=0.25,FrontDitchLight=0}
+    if(FLC==2){FrontLight=0.5,FrontDitchLight=0}
+    if(FLC==3){FrontLight=1,FrontDitchLight=1}
+}
+
+if(RearLightCycle & ~RearLightCycle){
+    holoEntity(4):soundPlay(0,1,"rlc_delta/cstands/sw_hdlt_1.wav")
+    RLC++,if(RLC == 4){RLC=0}
+    holoEntity(4):setBoneAngRelative(0,ang(-(44.9*RLC),0,0))
+    if(RLC==0){RearLight=0,RearDitchLight=0}
+    if(RLC==1){RearLight=0.25,RearDitchLight=0}
+    if(RLC==2){RearLight=0.5,RearDitchLight=0}
+    if(RLC==3){RearLight=1,RearDitchLight=1}  
+}
+
+if(ReverserInsert & ~ReverserInsert){
+    holoEntity(2):soundPlay(0,1,"_jazzlok/switches/barrel_reverser01.wav")
+    holoBodygroup(2,1,1)
+}elseif(!ReverserInsert & ~ReverserInsert){
+    holoEntity(2):soundPlay(0,1,"_jazzlok/switches/barrel_reverser02.wav")
+    holoBodygroup(2,1,0)
+}
+
+if(DynamicBrake & ~DynamicBrake){
+    holoEntity(18):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(18):animate(1,1)
+}elseif(!DynamicBrake & ~DynamicBrake){
+    holoEntity(18):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(18):animate(0,1)
+}
+
+if(EngineRun & ~EngineRun){
+    holoEntity(14):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(14):animate(1,1)
+}elseif(!EngineRun & ~EngineRun){
+    holoEntity(14):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(14):animate(0,1)
+}
+
+if(GenField & ~GenField){
+    holoEntity(15):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(15):animate(1,1)
+}elseif(!GenField & ~GenField){
+    holoEntity(15):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(15):animate(0,1)
+}
+
+if(Control & ~Control){
+    holoEntity(16):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(16):animate(1,1)
+}elseif(!Control & ~Control){
+    holoEntity(16):soundPlay(0,1,"jazzlok_sounds/switches/switch01.wav")
+    holoEntity(16):animate(0,1)
+}

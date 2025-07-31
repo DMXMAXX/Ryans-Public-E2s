@@ -1,0 +1,315 @@
+@name Ryan's Pack/Late GE/Back Panel
+@inputs ShortHood EngineersWallHeater HelpersWallHeater HeaterAirConditioner Display:wirelink
+@inputs AutoStopOverride CrosswalkLights LongHood Refrigerator Radio SnowPlow RoadCrossingLights DistributedPower
+@inputs WindowHeater FuelMonitor GlobalPosition DrainValves LocalControl FuelPump RunningLights AirDryer
+@inputs EventRecorder AutoWaterDrain AirBrakeComputer EngineStop ControlCompt ShortHoodNoLights LongHoodNoLights
+@inputs ShortHoodClass LongHoodClass Motor1 Motor2 Motor3 Motor4 Motor5 Motor6 SpeedSensor LockedAxleAlarm
+@inputs EngineersHeaterCycle HelpersHeaterCycle EngineControlCycle LightControlCycle EngineStart 
+@inputs DynBrkCutoutDefect BattCharge Computer
+@inputs RLight RDLight FLight FDLight Horn HandBrake
+@inputs RemoteIsolation CutIn
+@persist EC LC HC1 HC2 Start Stop Isolation
+@persist Bone_ShortHood Bone_HeadlightControl Bone_EngineControl Bone_CrosswalkLights Bone_LongHood
+@persist Bone_Refrigerator Bone_Radio Bone_SnowPlow Bone_RoadCrossingLights Bone_DistributedPower
+@persist Bone_WindowHeater Bone_FuelMonitor Bone_GlobalPosition Bone_DrainValves Bone_LocalControl
+@persist Bone_FuelPump Bone_RunningLights Bone_AirDryer Bone_EventRecorder Bone_AutoWaterDrain
+@persist Bone_AirBrakeComputer Bone_EngineStop Bone_ControlCompt Bone_Motor1 Bone_Motor2
+@persist Bone_Motor3 Bone_Motor4 Bone_SpeedSensor Bone_LockedAxleAlarm Bone_DynBrkCutoutDefect
+@persist Bone_BattCharge Bone_Computer Bone_EngineersWallHeater Bone_HelpersWallHeater
+@persist Bone_HeaterAirConditioner Bone_HelpersHeater Bone_EngineersHeater Bone_AutoStopOverride
+@persist Bone_ShortHoodNoLights Bone_LongHoodNoLights Bone_ShortHoodClass Bone_LongHoodClass
+@persist Bone_Motor5 Bone_Motor6
+@persist Disable_Short_No_Lights Disable_Long_No_Lights
+@persist Disable_Short_Class_Lights Disable_Long_Class_Lights TM_Type
+@outputs Start Stop Isolation BrakeCutIn Ditchflash 
+@outputs RearLight RearDitchLight FrontLight FrontDitchLight SDIS RightPTC LeftPTC
+@model models/ryan's detail pack/late ge backpanel.mdl
+
+#This version uses Ryan's Detail Pack -> https://steamcommunity.com/sharedfiles/filedetails/?id=3451666898
+#Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/Ryan's%20Pack/Late%20GE/back_panel.txt
+#display should have a Transparent Background and be the model "models/parts/ge_did_screen.mdl"
+
+if(first()|dupefinished()){   
+        #if the value is 0 there will be six traction motors if it is 1 there will be four.
+    TM_Type = 0
+  
+        #if the value is one the item will be Disabled.
+    Disable_Short_No_Lights = 0
+    Disable_Long_No_Lights = 1
+    Disable_Short_Class_Lights = 1
+    Disable_Long_Class_Lights = 1
+
+
+
+        #Working Display will be coming soon
+    Displayenity = Display:entity()
+    Displayenity:deparent()
+    Displayenity:setPos(entity():toWorld(vec(0.07,-1.25,-0.10)))
+    Displayenity:setAng(entity():toWorld(ang(-90,-90,0)))
+    Displayenity:parentTo(entity())
+    Displayenity:setMaterial("models/proppertextures/invisible")
+
+    Display:egpClear() 
+    Display:egpResolution(vec2(0),vec2(38,10))
+    for(I = 1, 37){
+        Display:egpBox(I, vec2(I, 1), vec2(2, 2))
+        Display:egpMaterial(I, "cubics_pack/ge_junk/did_font/space")
+        Display:egpBox(I+37, vec2(I, 3), vec2(2, 2))
+        Display:egpMaterial(I+37, "cubics_pack/ge_junk/did_font/space")
+    }
+
+    EC=1,LC=2
+    HC1=HC2=0
+    setName("Ryan's Late GE Back Panel")
+    entity():setBodygroup(3, Disable_Short_No_Lights)
+    entity():setBodygroup(4, Disable_Long_No_Lights)
+    entity():setBodygroup(5, Disable_Short_Class_Lights)
+    entity():setBodygroup(6, Disable_Long_Class_Lights)
+
+    if(TM_Type){
+        entity():setBodygroup(7, 2)
+        entity():setBodygroup(8, 2)
+        entity():setSubMaterial(7, "models/ryan's detail pack/ge backpanel labels/late_extra_control_4tm")
+    }else {
+        entity():setBodygroup(7, 0)
+        entity():setBodygroup(8, 0)  
+        entity():setSubMaterial(7, "models/ryan's detail pack/ge backpanel labels/late_extra_control")
+    }
+
+    #Bone Indexes
+    Bone_ShortHood = 1
+    Bone_HeadlightControl = 2
+    Bone_EngineControl = 3
+    Bone_CrosswalkLights = 4
+    Bone_LongHood = 5
+    Bone_Refrigerator = 6
+    Bone_Radio = 7
+    Bone_SnowPlow = 8
+    Bone_RoadCrossingLights = 9
+    Bone_DistributedPower = 10
+    Bone_WindowHeater = 11
+    Bone_FuelMonitor = 12
+    Bone_GlobalPosition = 13
+    Bone_DrainValves = 14
+    Bone_LocalControl = 15
+    Bone_FuelPump = 16
+    Bone_RunningLights = 17
+    Bone_AirDryer = 18
+    Bone_EventRecorder = 19
+    Bone_AutoWaterDrain = 20
+    Bone_AirBrakeComputer = 21
+    Bone_EngineStop = 22
+    Bone_ControlCompt = 23
+    Bone_Motor1 = 24
+    Bone_Motor2 = 25
+    Bone_Motor3 = 26
+    Bone_Motor4 = 27
+    Bone_SpeedSensor = 28
+    Bone_LockedAxleAlarm = 29
+    Bone_DynBrkCutoutDefect = 30
+    Bone_BattCharge = 31
+    Bone_Computer = 32
+    Bone_EngineersWallHeater = 33
+    Bone_HelpersWallHeater = 34
+    Bone_HeaterAirConditioner = 35
+    Bone_HelpersHeater = 36
+    Bone_EngineersHeater = 37
+    Bone_AutoStopOverride = 38
+    Bone_ShortHoodNoLights = 39
+    Bone_LongHoodNoLights = 40
+    Bone_ShortHoodClass = 41
+    Bone_LongHoodClass = 42
+    Bone_Motor5 = 43
+    Bone_Motor6 = 44
+
+    entity():setBoneAngRelative(Bone_ShortHood,ang(0,0,40-ShortHood*80))
+    entity():setBoneAngRelative(Bone_EngineersWallHeater,ang(0,0,40-EngineersWallHeater*80))
+    entity():setBoneAngRelative(Bone_HelpersWallHeater,ang(0,0,40-HelpersWallHeater*80))
+    entity():setBoneAngRelative(Bone_HeaterAirConditioner,ang(0,0,40-HeaterAirConditioner*80))
+    entity():setBonePosRelative(Bone_AutoStopOverride,vec(0,0,AutoStopOverride*-0.2))
+    entity():setBoneAngRelative(Bone_CrosswalkLights,ang(0,0,20-CrosswalkLights*40))
+    entity():setBoneAngRelative(Bone_LongHood,ang(0,0,40-LongHood*80))
+    entity():setBoneAngRelative(Bone_Refrigerator,ang(0,0,40-Refrigerator*80))
+    entity():setBoneAngRelative(Bone_Radio,ang(0,0,40-Radio*80))
+    entity():setBoneAngRelative(Bone_SnowPlow,ang(0,0,40-SnowPlow*80))
+    entity():setBoneAngRelative(Bone_RoadCrossingLights,ang(0,0,40-RoadCrossingLights*80))
+    entity():setBoneAngRelative(Bone_DistributedPower,ang(0,0,40-DistributedPower*80))
+    entity():setBoneAngRelative(Bone_WindowHeater,ang(0,0,40-WindowHeater*80))
+    entity():setBoneAngRelative(Bone_FuelMonitor,ang(0,0,40-FuelMonitor*80))
+    entity():setBoneAngRelative(Bone_GlobalPosition,ang(0,0,40-GlobalPosition*80))
+    entity():setBoneAngRelative(Bone_DrainValves,ang(0,0,40-DrainValves*80))
+    entity():setBoneAngRelative(Bone_LocalControl,ang(0,0,40-LocalControl*80))
+    entity():setBoneAngRelative(Bone_FuelPump,ang(0,0,40-FuelPump*80))
+    entity():setBoneAngRelative(Bone_RunningLights,ang(0,0,40-RunningLights*80))
+    entity():setBoneAngRelative(Bone_AirDryer,ang(0,0,40-AirDryer*80))
+    entity():setBoneAngRelative(Bone_EventRecorder,ang(0,0,40-EventRecorder*80))
+    entity():setBoneAngRelative(Bone_AutoWaterDrain,ang(0,0,40-AutoWaterDrain*80))
+    entity():setBoneAngRelative(Bone_AirBrakeComputer,ang(0,0,40-AirBrakeComputer*80))
+    entity():setBonePosRelative(Bone_EngineStop,vec(0,0,EngineStop*-0.2))
+    entity():setBoneAngRelative(Bone_ControlCompt,ang(0,0,20-ControlCompt*40))
+    entity():setBoneAngRelative(Bone_ShortHoodNoLights,ang(0,0,20-ShortHoodNoLights*40)*(1-Disable_Short_No_Lights))
+    entity():setBoneAngRelative(Bone_LongHoodNoLights,ang(0,0,20-LongHoodNoLights*40)*(1-Disable_Long_No_Lights))
+    entity():setBoneAngRelative(Bone_ShortHoodClass,ang(0,0,20-ShortHoodClass*40)*(1-Disable_Short_Class_Lights))
+    entity():setBoneAngRelative(Bone_LongHoodClass,ang(0,0,20-LongHoodClass*40)*(1-Disable_Long_Class_Lights))
+    entity():setBoneAngRelative(Bone_Motor1,ang(0,0,20-Motor1*40))
+    entity():setBoneAngRelative(Bone_Motor2,ang(0,0,20-Motor2*40))
+    entity():setBoneAngRelative(Bone_Motor3,ang(0,0,20-Motor3*40))
+    entity():setBoneAngRelative(Bone_Motor4,ang(0,0,20-Motor4*40))
+    entity():setBoneAngRelative(Bone_Motor5,ang(0,0,20-Motor5*40)*(1-!!TM_Type))
+    entity():setBoneAngRelative(Bone_Motor6,ang(0,0,20-Motor6*40)*(1-!!TM_Type))
+    entity():setBoneAngRelative(Bone_SpeedSensor,ang(0,0,20-SpeedSensor*40))
+    entity():setBoneAngRelative(Bone_LockedAxleAlarm,ang(0,0,20-LockedAxleAlarm*40))
+    entity():setBoneAngRelative(Bone_DynBrkCutoutDefect,ang(0,0,20-DynBrkCutoutDefect*40))
+    entity():setBoneAngRelative(Bone_BattCharge,ang(0,0,40-BattCharge*80))
+    entity():setBoneAngRelative(Bone_Computer,ang(0,0,40-Computer*80))
+
+    entity():setBoneAngRelative(Bone_EngineControl,ang((EC*-44.9)+45,0,0))
+    entity():setBoneAngRelative(Bone_HeadlightControl,ang((LC*-44.9),0,0))
+    entity():setBoneAngRelative(Bone_EngineersHeater,ang((HC1*-89.9),0,0))
+    entity():setBoneAngRelative(Bone_HelpersHeater,ang((HC2*-89.9),0,0))
+}
+
+if(~ShortHood){entity():setBoneAngRelative(Bone_ShortHood,ang(0,0,40-ShortHood*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~EngineersWallHeater){entity():setBoneAngRelative(Bone_EngineersWallHeater,ang(0,0,40-EngineersWallHeater*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~HelpersWallHeater){entity():setBoneAngRelative(Bone_HelpersWallHeater,ang(0,0,40-HelpersWallHeater*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~HeaterAirConditioner){entity():setBoneAngRelative(Bone_HeaterAirConditioner,ang(0,0,40-HeaterAirConditioner*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~AutoStopOverride){entity():setBonePosRelative(Bone_AutoStopOverride,vec(0,0,AutoStopOverride*-0.2)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~CrosswalkLights){entity():setBoneAngRelative(Bone_CrosswalkLights,ang(0,0,20-CrosswalkLights*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~LongHood){entity():setBoneAngRelative(Bone_LongHood,ang(0,0,40-LongHood*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~Refrigerator){entity():setBoneAngRelative(Bone_Refrigerator,ang(0,0,40-Refrigerator*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~Radio){entity():setBoneAngRelative(Bone_Radio,ang(0,0,40-Radio*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~SnowPlow){entity():setBoneAngRelative(Bone_SnowPlow,ang(0,0,40-SnowPlow*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~RoadCrossingLights){entity():setBoneAngRelative(Bone_RoadCrossingLights,ang(0,0,40-RoadCrossingLights*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~DistributedPower){entity():setBoneAngRelative(Bone_DistributedPower,ang(0,0,40-DistributedPower*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~WindowHeater){entity():setBoneAngRelative(Bone_WindowHeater,ang(0,0,40-WindowHeater*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~FuelMonitor){entity():setBoneAngRelative(Bone_FuelMonitor,ang(0,0,40-FuelMonitor*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~GlobalPosition){entity():setBoneAngRelative(Bone_GlobalPosition,ang(0,0,40-GlobalPosition*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~DrainValves){entity():setBoneAngRelative(Bone_DrainValves,ang(0,0,40-DrainValves*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~LocalControl){entity():setBoneAngRelative(Bone_LocalControl,ang(0,0,40-LocalControl*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~FuelPump){entity():setBoneAngRelative(Bone_FuelPump,ang(0,0,40-FuelPump*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~RunningLights){entity():setBoneAngRelative(Bone_RunningLights,ang(0,0,40-RunningLights*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~AirDryer){entity():setBoneAngRelative(Bone_AirDryer,ang(0,0,40-AirDryer*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~EventRecorder){entity():setBoneAngRelative(Bone_EventRecorder,ang(0,0,40-EventRecorder*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~AutoWaterDrain){entity():setBoneAngRelative(Bone_AutoWaterDrain,ang(0,0,40-AutoWaterDrain*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~AirBrakeComputer){entity():setBoneAngRelative(Bone_AirBrakeComputer,ang(0,0,40-AirBrakeComputer*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~EngineStop){entity():setBonePosRelative(Bone_EngineStop,vec(0,0,EngineStop*-0.2)),soundPlay(0,1,"jazzlok_sounds/switches/switch02.wav")}
+if(~ControlCompt){entity():setBoneAngRelative(Bone_ControlCompt,ang(0,0,20-ControlCompt*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~ShortHoodNoLights&!Disable_Short_No_Lights){entity():setBoneAngRelative(Bone_ShortHoodNoLights,ang(0,0,20-ShortHoodNoLights*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~LongHoodNoLights&!Disable_Long_No_Lights){entity():setBoneAngRelative(Bone_LongHoodNoLights,ang(0,0,20-LongHoodNoLights*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~ShortHoodClass&!Disable_Short_Class_Lights){entity():setBoneAngRelative(Bone_ShortHoodClass,ang(0,0,20-ShortHoodClass*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~LongHoodClass&!Disable_Long_Class_Lights){entity():setBoneAngRelative(Bone_LongHoodClass,ang(0,0,20-LongHoodClass*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~SpeedSensor){entity():setBoneAngRelative(Bone_SpeedSensor,ang(0,0,20-SpeedSensor*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~LockedAxleAlarm){entity():setBoneAngRelative(Bone_LockedAxleAlarm,ang(0,0,20-LockedAxleAlarm*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~DynBrkCutoutDefect){entity():setBoneAngRelative(Bone_DynBrkCutoutDefect,ang(0,0,20-DynBrkCutoutDefect*40)),soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")}
+if(~BattCharge){entity():setBoneAngRelative(Bone_BattCharge,ang(0,0,40-BattCharge*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+if(~Computer){entity():setBoneAngRelative(Bone_Computer,ang(0,0,40-Computer*80)),soundPlay(0,1,"_jazzlok/switches/switch_heavy_02.wav")}
+
+if(~Motor1){
+    timer(0.1,function(){
+        entity():setBoneAngRelative(Bone_Motor1,ang(0,0,20-Motor1*40))
+        soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    })
+    entity():setBonePosRelative(Bone_Motor1,vec(0,0,0.096))
+    timer(0.2,function(){
+        entity():setBonePosRelative(Bone_Motor1,vec(0,0,0))
+    })
+}
+if(~Motor2){
+    timer(0.1,function(){
+        entity():setBoneAngRelative(Bone_Motor2,ang(0,0,20-Motor2*40))
+        soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    })
+    entity():setBonePosRelative(Bone_Motor2,vec(0,0,0.096))
+    timer(0.2,function(){
+        entity():setBonePosRelative(Bone_Motor2,vec(0,0,0))
+    })
+}
+if(~Motor3){
+    timer(0.1,function(){
+        entity():setBoneAngRelative(Bone_Motor3,ang(0,0,20-Motor3*40))
+        soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    })
+    entity():setBonePosRelative(Bone_Motor3,vec(0,0,0.096))
+    timer(0.2,function(){
+        entity():setBonePosRelative(Bone_Motor3,vec(0,0,0))
+    })
+}
+if(~Motor4){
+    timer(0.1,function(){
+        entity():setBoneAngRelative(Bone_Motor4,ang(0,0,20-Motor4*40))
+        soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    })
+    entity():setBonePosRelative(Bone_Motor4,vec(0,0,0.096))
+    timer(0.2,function(){
+        entity():setBonePosRelative(Bone_Motor4,vec(0,0,0))
+    })
+}
+if(~Motor5&!TM_Type){
+    timer(0.1,function(){
+        entity():setBoneAngRelative(Bone_Motor5,ang(0,0,20-Motor5*40))
+        soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    })
+    entity():setBonePosRelative(Bone_Motor5,vec(0,0,0.096))
+    timer(0.2,function(){
+        entity():setBonePosRelative(Bone_Motor5,vec(0,0,0))
+    })
+}
+if(~Motor6&!TM_Type){
+    timer(0.1,function(){
+        entity():setBoneAngRelative(Bone_Motor6,ang(0,0,20-Motor6*40))
+        soundPlay(0,1,"jazzlok_sounds/switches/switch03.wav")
+    })
+    entity():setBonePosRelative(Bone_Motor6,vec(0,0,0.096))
+    timer(0.2,function(){
+        entity():setBonePosRelative(Bone_Motor6,vec(0,0,0))
+    })
+}
+
+if(EngineStop|!FuelPump){Stop=1}else{Stop=0}
+if(EngineStart&EC==1&!Stop){Start=1}else{Start=0}
+
+if(CutIn&AirBrakeComputer){BrakeCutIn=1}else{BrakeCutIn=0}
+
+if(Computer){timer("Screen1",1,function(){SDIS=1})
+    timer("Screen2",12,function(){RightPTC=1})
+    timer("Screen3",20,function(){LeftPTC=1})
+    }else{stoptimer("Screen1"),stoptimer("Screen2")
+    stoptimer("Screen3"),SDIS=0,LeftPTC=0,RightPTC=0
+}
+
+if(RoadCrossingLights){Ditchflash=Horn}else{Ditchflash=0}
+if(ShortHood&(LC==3|LC==2|LC==1)){FrontLight=FLight,FrontDitchLight=FDLight}else{FrontLight=0,FrontDitchLight=0}
+if(LongHood&(LC==4|LC==2|LC==0)){RearLight=RLight,RearDitchLight=RDLight}else{RearLight=0,RearDitchLight=0}
+
+if(!RemoteIsolation & ~RemoteIsolation){
+    Isolation=0,EC=1,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    entity():setBoneAngRelative(Bone_EngineControl,ang((EC*-44.9)+45,0,0))
+}elseif(RemoteIsolation & ~RemoteIsolation){
+    Isolation=1,EC=3,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    entity():setBoneAngRelative(Bone_EngineControl,ang((EC*-44.9)+45,0,0))
+}
+
+if(HandBrake){entity():setSubMaterial(21,"models/proppertextures/bulb_red_lit")}
+else{entity():setSubMaterial(21,"models/proppertextures/bulb_red_unlit")}
+
+if(EngineControlCycle & ~EngineControlCycle){
+    EC++,if(EC == 4){EC=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    entity():setBoneAngRelative(Bone_EngineControl,ang((EC*-44.9)+45,0,0))
+    if(EC>1){Isolation=1}else{Isolation=0}
+}    
+if(LightControlCycle & ~LightControlCycle){
+    LC++,if(LC == 5){LC=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    entity():setBoneAngRelative(Bone_HeadlightControl,ang((LC*-44.9),0,0))
+}
+if(EngineersHeaterCycle & ~EngineersHeaterCycle){
+    HC1++,if(HC1 == 3){HC1=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    entity():setBoneAngRelative(Bone_EngineersHeater,ang((HC1*-89.9),0,0))
+}
+if(HelpersHeaterCycle & ~HelpersHeaterCycle){
+    HC2++,if(HC2 == 3){HC2=0}
+    soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
+    entity():setBoneAngRelative(Bone_HelpersHeater,ang((HC2*-89.9),0,0))
+}
