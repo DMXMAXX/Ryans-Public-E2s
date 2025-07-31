@@ -26,7 +26,7 @@
 @model models/ryan's detail pack/late ge backpanel.mdl
 
 #This version uses Ryan's Detail Pack -> https://steamcommunity.com/sharedfiles/filedetails/?id=3451666898
-#Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/Ryan's%20Pack/Late%20GE/back_panel.txt
+#Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/ryan's_pack/late_ge/back_panel.txt
 #display should have a Transparent Background and be the model "models/parts/ge_did_screen.mdl"
 
 if(first()|dupefinished()){   
