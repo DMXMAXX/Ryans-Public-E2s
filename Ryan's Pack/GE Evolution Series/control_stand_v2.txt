@@ -1,7 +1,7 @@
 @name Ryan's Pack/GE Evolution Series/Control Stand V2
 @inputs MU_Master Pod:entity ControlStand:wirelink Number:string EmBrake HEP_Notch Active RemoteControl UsingRearSeat HumpMultiplier SetFeedPressure CommandThrottle CommandDynamic CommandAutobrake CommandIndependentbrake
 @inputs  BellToggle Horn AlertorReset Sander EngineRun GenField Control DynamicBrake GaugeLight StepLight FrontLightCycle RearLightCycle ReverserInsert
-@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight HandBrake Autostart
+@outputs CtlTable:table RemoteMode Bell RearLight RearDitchLight FrontLight FrontDitchLight Autostart
 @persist NotchedThrottle NumThrottleNotches HasDynamics NotchedDynamics TransitionMode TransitionControlType AirBrakeMode LocoBrakeMode InitialReduction Lock_26L Bleeding CTL_Version:string
 @persist [Lever_Throttle Lever_ReverserF Lever_ReverserN Lever_ReverserB Lever_24RL Lever_26L AirBrakeApply AirBrakeRelease AirBrakeDump LocoBrakeFull LocoBrakeReleaseHard LocoBrakeReleaseSoft WarningHiss]:string
 @persist NQ Notch DNQ DynaNotch Dynamics TransitionQ RevQ ABQ HissQ LBQ LHissQ
@@ -12,7 +12,7 @@
 @persist HornType C1P:vector C1A:angle CordAnchor1:vector CordAnchor2:vector CordExtendLength DongleHeight PullLength DownRatio
 @persist CS:entity FLC RLC
 @persist AutoB:entity IndB:entity
-@persist RevBone ThrBone DynBone TBBone LBBone
+@persist RevBone ThrBone DynBone TBBone LBBone LBHBone
 @trigger
 
 if(duped()){
@@ -116,11 +116,8 @@ if(first()){
     
     #Holos
     A=1
-    holoCreate(A,CS:toWorld(vec(-15.75,-20.2,12.35)),vec(1),CS:toWorld(ang(0,0,0)),vec(255),"models/fox/knorr_ccb_brakestand.mdl")
+    holoCreate(A,CS:toWorld(vec(-15.75,-20.2,12.6)),vec(1),CS:toWorld(ang(0,0,0)),vec(255),"models/rlc_delta_lua/cstands/nyab_knorr_stand_mid.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
-    holoBodygroup(A,2,1)
-    holoBodygroup(A,3,1)
 
     A=2
     holoCreate(A,CS:toWorld(vec(-13.25,-3.35,14.85)),vec(1.01),CS:toWorld(ang(0,-10.25,0)),vec(255),"models/rlc_delta_lua/cstands/kc108_plate.mdl")
@@ -150,9 +147,10 @@ if(first()){
     holoEntity(A):setSubMaterial(3,"models/proppertextures/acrylic")
 
     A=8
-    holoCreate(A,CS:toWorld(vec(-14.78,-13.5,19-3-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19-3-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
     holoParent(A,CS)
     holoBodygroup(A,2,5)
+
 
     A=9
     holoCreate(A,CS:toWorld(vec(-15,-13.5,19-6-0.4)),vec(1),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/solenoid levers.mdl")
@@ -177,7 +175,7 @@ if(first()){
     holoParent(A,CS)
 
     A=13
-    holoCreate(A,CS:toWorld(vec(-11.1-0.25, 7.597-1, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel.mdl")
+    holoCreate(A,CS:toWorld(vec(-11.1-0.25, 7.597-1, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
     holoParent(A,CS)
     holoBodygroup(A,0,0)
     holoEntity(A):setSubMaterial(5,"models/indicators/ind_enginerun_unlit")
@@ -185,25 +183,25 @@ if(first()){
     holoEntity(A):setSubMaterial(3,"models/inqdicators/ind_control_unlit")
 
     A=14
-    holoCreate(A,CS:toWorld(vec(-11.6-0.25, 6.6-1, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoCreate(A,CS:toWorld(vec(-11.6-0.25, 6.6-1, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
     holoBodygroup(A,2,5)  
     holoBodygroup(A,3,1) 
 
     A=15
-    holoCreate(A,CS:toWorld(vec(-11.4-0.25, 7.7-1, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoCreate(A,CS:toWorld(vec(-11.4-0.25, 7.7-1, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
     holoBodygroup(A,2,5)  
     holoBodygroup(A,3,1) 
 
     A=16
-    holoCreate(A,CS:toWorld(vec(-11.2-0.25, 8.7-1, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoCreate(A,CS:toWorld(vec(-11.2-0.25, 8.7-1, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
     holoBodygroup(A,2,5) 
     holoBodygroup(A,3,1) 
 
     A=17
-    holoCreate(A,CS:toWorld(vec(-11.1+0.7, 7.597+4, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel.mdl")
+    holoCreate(A,CS:toWorld(vec(-11.1+0.7, 7.597+4, 19.372)),vec(1),CS:toWorld(ang(0,-10.25-90,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
     holoParent(A,CS)
     holoBodygroup(A,0,0)
     holoEntity(A):setSubMaterial(5,"models/indicators/ind_dyn_unlit")
@@ -211,59 +209,59 @@ if(first()){
     holoEntity(A):setSubMaterial(3,"models/indicators/ind_step_unlit")
 
     A=18
-    holoCreate(A,CS:toWorld(vec(-11.6+0.7, 6.57+4, 19.896)),vec(1,1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
+    holoCreate(A,CS:toWorld(vec(-11.6+0.7, 6.57+4, 19.896)),vec(1.1,1.1,0.9),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/single breaker.mdl")
     holoParent(A,CS)
     holoBodygroup(A,2,5) 
     holoBodygroup(A,3,1) 
 
     A=19
-    holoCreate(A,CS:toWorld(vec(-10.8+0.7, 7.55+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-10.8+0.7, 7.55+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
     holoParent(A,CS)
 
     A=20
-    holoCreate(A,CS:toWorld(vec(-10.6+0.7, 8.6+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoCreate(A,CS:toWorld(vec(-10.6+0.7, 8.6+4, 19.896)),vec(1),CS:toWorld(ang(0,-10.25+90,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
     holoParent(A,CS)
 
     A=21
     holoCreate(A,CS:toWorld(vec(-13.35,-13.5,22.1)),vec(0.8),CS:toWorld(ang(0,90,45)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,3)
+    holoBodygroup(A,1,2)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/horn")
 
     A=22
     holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-(1)+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
+    holoBodygroup(A,1,0)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/horn_sequencer")
 
     A=23
     holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-4+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
+    holoBodygroup(A,1,0)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/eot_rear_emergency_brake")
 
     A=24
     holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-7+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
+    holoBodygroup(A,1,0)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/bell")
 
     A=25
     holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-10+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
+    holoBodygroup(A,1,0)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/alerter_reset")
 
     A=26
     holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-13+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
+    holoBodygroup(A,1,0)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/force_sand") 
 
     A=27
     holoCreate(A,CS:toWorld(vec(-14.75,-13.5,19.8-16+1.15)),vec(0.9),CS:toWorld(ang(0,90,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
     holoParent(A,CS)
-    holoBodygroup(A,1,1)
+    holoBodygroup(A,1,0)
     holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/lead_sand")    
 
     A=28
@@ -285,13 +283,75 @@ if(first()){
     holoCreate(A,CS:toWorld(vec(-15.35, -17.5, -0)),vec(1),CS:toWorld(ang(0,90,76)),vec(255),"models/ryan's detail pack/rotary switch plate.mdl")
     holoParent(A,CS)
     holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-25.08,-10.82,20.85)),vec(1),CS:toWorld(ang(180,90,-90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-25.08,-10.82,17.1)),vec(1),CS:toWorld(ang(180,90,-90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-25.08,-10.84,13.33)),vec(1),CS:toWorld(ang(180,90,-90)),vec(255),"models/ryan's detail pack/small switches.mdl")
+    holoParent(A,CS)
+    
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.29,11.59,14.75)),vec(1,1,1),CS:toWorld(ang(0,79,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
+    holoParent(A,CS)
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-11.36,6.62,14.74)),vec(1,1,1),CS:toWorld(ang(0,-101,0)),vec(255),"models/meem/panel/ge_switch_panel2.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(3,"models/monkcabdetailpack/indwaffle/ind_unlit")
+    holoEntity(A):setSubMaterial(4,"models/monkcabdetailpack/indwaffle/ind_unlit")
+    holoEntity(A):setSubMaterial(5,"models/monkcabdetailpack/indwaffle/ind_unlit")
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-11.36,5.49,15.2)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-11.16,6.57,15.2)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.95,7.64,15.2)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/small switch with label plate.mdl")
+    holoParent(A,CS)
+
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.34,11.58,15.5)),vec(1,1,1),CS:toWorld(ang(0,79,90)),vec(255),"models/ryan's detail pack/800t style lamps.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/glass_opaque_unlit")
+    holoEntity(A):setSubMaterial(3,"models/ryan's detail pack/glass_opaque_unlit")
+    holoColor(A,vec(159,25,25))
+
+    A++
+    holoCreate(A,CS:toWorld(vec(-10.31,11.6,14.22)),vec(1,1,1),CS:toWorld(ang(0,-101,-90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoBodygroup(A,2,1)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/invisible")
+
+    A++
+    holoCreate(A,CS:toWorld(vec(-13.97,-7.97,6.94)),vec(1.5,1.25,1),CS:toWorld(ang(0,80,90)),vec(255),"models/ryan's detail pack/label plates.mdl")
+    holoParent(A,CS)
+    holoEntity(A):setSubMaterial(2,"models/ryan's detail pack/plate labels/ground_reset")
+     
+    A++
+    holoCreate(A,CS:toWorld(vec(-13.52,-5.08,6.95)),vec(1,1,1),CS:toWorld(ang(0,80,90)),vec(255),"models/ryan's detail pack/800t style buttons.mdl")
+    holoParent(A,CS)
+    holoBodygroup(A,1,1)
+    holoEntity(A):setSubMaterial(2,"models/proppertextures/plastic_black")
 
     RevBone = holoEntity(2):boneIndex("reverser")
     ThrBone = holoEntity(2):boneIndex("throttle")
     DynBone = holoEntity(2):boneIndex("dynamic")
 
-    TBBone = holoEntity(1):boneIndex("Autobrake")
-    LBBone = holoEntity(1):boneIndex("Indebrake2")
+    TBBone = 1
+    LBBone = 2
+    LBHBone = 3
     
     function vector linpos(V1:vector, V2:vector, P){
         return V1 + P*(V2-V1)
@@ -976,10 +1036,11 @@ if(clk("clk")){
     Autostart = SetReverser
 
     TBB = select(SetBrakeNotch+1,0,adc(0,FeedPressure-InitialReduction - FeedPressure*64/FeedPressure,50,FeedPressure-InitialReduction-SetEqualRes)+30,110,0,0,0,125)
-    holoEntity(1):setBoneAngRelative(TBBone,ang(0,-TBB/1.5,0))
+    holoEntity(1):setBoneAngRelative(TBBone,ang(0,TBB/1.5,0))
     #Loco Brake
     local LBB = SetBleeding ? 0 : (SetLocoBrakePressure/72)*110
-    holoEntity(1):setBoneAngRelative(LBBone,ang(0,-LBB/1.35,-SetBleeding*8))
+    holoEntity(1):setBoneAngRelative(LBBone,ang(0,LBB/1.7,0))
+    holoEntity(1):setBoneAngRelative(LBHBone,ang(0,LBB/1.7,-SetBleeding*5))    
     
     timer("clk",50)
 }elseif(clk("EndHiss")){

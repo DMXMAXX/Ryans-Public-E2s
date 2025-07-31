@@ -7,11 +7,11 @@
 @inputs CrosswalkLights ControlCompt FrontNumberLights CutIn
 @inputs Heater1Cycle Heater2Cycle WallHeater1 WallHeater2 HeaterAirConditioner AutoStopOverright
 @inputs RLight RDLight FLight FDLight Cover Horn HandBrake
-@inputs CommandStart CommandStop CommandIsolation
+@inputs RemoteIsolation
 @persist EC LC HC1 HC2 Start Stop Isolation
-@outputs Start Stop Isolation BrakeCutIn HornLights
+@outputs Start Stop Isolation BrakeCutIn Ditchflash
 @outputs RearLight RearDitchLight FrontLight FrontDitchLight SDIS RightPTC LeftPTC
-@model models/ryan's detail pack/ge evolution series backpanel.mdl
+@model models/ryan's detail pack/ge evolution series backpanel bodygroups.mdl
 
 #This version uses Ryan's Detail Pack -> https://steamcommunity.com/sharedfiles/filedetails/?id=3451666898
 #Make sure to use the latest version -> https://github.com/DMXMAXX/Ryans-Public-E2s/blob/main/Ryan's%20Pack/GE%20Evolution%20Series/back_panel_v2.txt
@@ -102,36 +102,23 @@ if(Computer){timer("Screen1",1,function(){SDIS=1})
     stoptimer("Screen3"),SDIS=0,LeftPTC=0,RightPTC=0
 }
 
-if(CommandStart & ~CommandStart){
-    stoptimer("AutoStop1"),stoptimer("AutoStart1"),stoptimer("AutoStart2")
-    Isolation=Stop=0,EC=Start=1
-    timer("AutoStart1",1,function(){Start=0})  
-    timer("AutoStart2",35,function(){Isolation=1,EC=3})    
-}
-
-if(CommandStop & ~CommandStop){
-    stoptimer("AutoStop1"),stoptimer("AutoStart1"),stoptimer("AutoStart2")
-    Isolation=Start=0,EC=Stop=1
-    timer("AutoStop",1,function(){Stop=0})
-}
-
-if(RoadCrossingLights){HornLights=Horn}else{HornLights=0}
+if(RoadCrossingLights){Ditchflash=Horn}else{Ditchflash=0}
 if(ShortHood&(LC==3|LC==2|LC==1)){FrontLight=FLight,FrontDitchLight=FDLight}else{FrontLight=0,FrontDitchLight=0}
 if(LongHood&(LC==4|LC==2|LC==0)){RearLight=RLight,RearDitchLight=RDLight}else{RearLight=0,RearDitchLight=0}
 
-if(!CommandIsolation & ~CommandIsolation){
+if(!RemoteIsolation & ~RemoteIsolation){
 Isolation=0,EC=1,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
 entity():setBoneAngRelative(29,ang((EC*-44.9)+45,0,0))
-}elseif(CommandIsolation & ~CommandIsolation){
+}elseif(RemoteIsolation & ~RemoteIsolation){
 Isolation=1,EC=3,soundPlay(0,1,"_jazzlok/switches/switch_heavy_03.wav")
 entity():setBoneAngRelative(29,ang((EC*-44.9)+45,0,0))
 }
 
-if(HandBrake){entity():setSubMaterial(14,"models/proppertextures/bulb_red_lit")}
-else{entity():setSubMaterial(14,"models/proppertextures/bulb_red_unlit")}
+if(HandBrake){entity():setSubMaterial(27,"models/proppertextures/bulb_red_lit")}
+else{entity():setSubMaterial(27,"models/proppertextures/bulb_red_unlit")}
 
-if(BatterySaverReset){entity():setSubMaterial(5,"models/proppertextures/bulb_blue_lit")}
-else{entity():setSubMaterial(5,"models/proppertextures/bulb_blue_unlit")}
+if(BatterySaverReset){entity():setSubMaterial(22,"models/proppertextures/bulb_blue_lit")}
+else{entity():setSubMaterial(22,"models/proppertextures/bulb_blue_unlit")}
 
 if(EngineControlCycle & ~EngineControlCycle){
     EC++,if(EC == 4){EC=0}
